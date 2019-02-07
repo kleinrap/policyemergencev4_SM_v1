@@ -38,9 +38,12 @@ class SchellingAgent(Agent):
             if neighbor.type == self.type:
                 similar += 1
 
-        # If unhappy, move:
+        # If unhappy, move (only within the quota):
         if similar < self.model.homophily:
-            self.model.grid.move_to_empty(self)
+            # print(self.model.movementQuotaCount, self.model.movementQuota*self.model.schedule.get_agent_count())
+            if self.model.movementQuotaCount <= self.model.movementQuota*self.model.schedule.get_agent_count():
+                self.model.grid.move_to_empty(self)
+                self.model.movementQuotaCount += 1
         else:
             self.model.happy += 1
 
@@ -51,7 +54,7 @@ class Schelling(Model):
     Model class for the Schelling segregation model.
     '''
 
-    def __init__(self, height=20, width=20, density=0.8, minority_pc=0.2, homophily=3, movementQuota=0.15):
+    def __init__(self, height=20, width=20, density=0.8, minority_pc=0.2, homophily=3, movementQuota=0.30):
         '''
         '''
 
@@ -69,6 +72,7 @@ class Schelling(Model):
         self.empty = 0
         self.type0agents = 0
         self.type1agents = 0
+        self.movementQuotaCount = 0
         self.datacollector = DataCollector(
             # Model-level count of happy agents
             {"happy": "happy", "empty": "empty"},
@@ -106,9 +110,13 @@ class Schelling(Model):
         self.empty = 0  # Reset counter of empty cells
         self.type0agents = 0  # Reset count of type 0 agents
         self.type1agents = 0  # Reset count of type 1 agents
+        self.movementQuotaCount = 0
 
         # run the step for the agents
+
         self.schedule.step()
+        print(self.movementQuotaCount, " agents moved.")
+        print(self.happy, " are happy agents.")
 
         # Calculating empty counter
         self.empty = (self.height*self.width) - self.schedule.get_agent_count()
