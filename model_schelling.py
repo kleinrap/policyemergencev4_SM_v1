@@ -12,8 +12,6 @@ Need addition model - For coupling:
     - Type 1 agents leaving must be replaced by type 0 agents.
     - Where are new agents incoming placed onto the map? Random locations
     - Is there a constant turnover? Or is it a one time thing? Dor policy instruments, it makes more sense to have a continuous turnover of a certain percentage
-- Change the movement check
-    - Use a radius to check where to move
 
 
 KPIs:
@@ -21,7 +19,7 @@ What needs to be recorded (KPIs):
 Empty cells -- Implemented
 Green cells (type 0) -- Implemented
 Blue cells (type 1) -- Implemented
-Vision - Global - Not implemented yet
+Vision - Global - Implemented
 Movement - Global - Implemented
 Green homophily - Implemented
 Blue homophily - Implemented
@@ -49,11 +47,7 @@ class SchellingAgent(Agent):
         happyBool = self.happy_check()
 
         # If unhappy, move - considering the movement quota and whether the agent is type0 or type1:
-        if self.type == 0 and happyBool == False:
-            if self.model.movementQuotaCount <= self.model.movementQuota*self.model.schedule.get_agent_count():
-                self.model.grid.move_to_empty(self)
-                self.model.movementQuotaCount += 1
-        if self.type == 1 and happyBool == False:
+        if happyBool == False:
             if self.model.movementQuotaCount <= self.model.movementQuota*self.model.schedule.get_agent_count():
                 self.model.grid.move_to_empty(self)
                 self.model.movementQuotaCount += 1
@@ -63,7 +57,7 @@ class SchellingAgent(Agent):
         '''
         Function used to check if the agent is happy in its current position. Use for checking if there is a need to move and to check if the location it is moving to is appropriate.
         '''
-        # Happiness check:
+        # Initialisation of patameters
         similar = 0
         happyBool = bool()
 
@@ -78,11 +72,7 @@ class SchellingAgent(Agent):
         # Converting similarity value into a percentage
         similar = similar/len(neighborList)
 
-        if self.type == 0 and similar < self.model.homophilyType0:
-            happyBool = False
-        if self.type == 1 and similar < self.model.homophilyType1:
-            happyBool = False
-        else:
+        if (self.type == 0 and similar > self.model.homophilyType0) or (self.type == 1 and similar > self.model.homophilyType1):
             happyBool = True
             self.model.happy += 1
 
