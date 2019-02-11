@@ -116,7 +116,7 @@ class Schelling(Model):
         self.numberOfAgents = 0
         self.datacollector = DataCollector(
             # Model-level count of happy agents
-            {"happy": "happy", "numberOfAgents": "numberOfAgents" },
+            {"happy": "happy", "evenness": "evenness", "numberOfAgents": "numberOfAgents" },
             # For testing purposes, agent's individual x and y
             {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]})
 
@@ -170,24 +170,26 @@ class Schelling(Model):
                 self.type1agents += 1
 
         # Updating the evenness parameter
+        # Equation of the evenness parameter can be found in Haw (2015)
         # Getting the agents into a list
         listAgents = list(self.schedule._agents.items())
-        evenness = 0
-        # Number of type 0 and type 1 agents:
-
+        self.evenness = 0
+        # Iterating through all agents
         for agents in self.schedule.agent_buffer(shuffled=True):
-            test = agents.model.grid.get_neighbors(listAgents[agents][1].pos, True, False, 1)
-            print(test)
-
-        for agents in range(len(listAgents)):
-            # print(listAgents[agents][1].pos)
-            neighborList1 = listAgents[agents][1].model.grid.get_neighbors(listAgents[agents][1].pos, True, False, 1)
-            # print("  ")
-            # for agents1 in neighborList1:
-            #     print(agents1.type)
-        print("Length: ",len(listAgents))
-        # print(listAgents[1][1].pos)
-
+            neighborList = agents.model.grid.get_neighbors(agents.pos, True, False, 1)
+            countType0agents = 0
+            countType1agents = 0
+            for neighbors in neighborList:
+                if neighbors.type == 0:
+                    countType0agents += 1
+                if neighbors.type == 1:
+                    countType1agents += 1
+            # Updating the evenness sum for this agent:
+            self.evenness += abs((countType0agents/self.type0agents) - (countType1agents/self.type1agents))
+        self.evenness = 0.5 * self.evenness
+        #For purposes of plotting:
+        self.evenness = 50 * self.evenness
+        # print('evenness: ', self.evenness)
 
         # collect data
         self.datacollector.collect(self)
