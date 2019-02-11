@@ -4,7 +4,7 @@ from mesa.space import SingleGrid
 from mesa.datacollection import DataCollector
 
 '''
-Need addition model - For coupling:
+Optional for coupling:
 - Migration
     - The net amount of agent change per step needs to be zero.
     - Random agents are removed? Or unhappy agents? It should be unhappy ones - that makes more sense at least.
@@ -13,6 +13,8 @@ Need addition model - For coupling:
     - Where are new agents incoming placed onto the map? Random locations
     - Is there a constant turnover? Or is it a one time thing? Dor policy instruments, it makes more sense to have a continuous turnover of a certain percentage
 
+Things that might be needed:
+- Move the happiness KPI calculation to after the step function. Right now, the calculation is slightly inaccurate as it is done throughout the simulation itself and not at its end.
 
 KPIs:
 What needs to be recorded (KPIs):
@@ -47,10 +49,13 @@ class SchellingAgent(Agent):
         happyBool = self.happy_check()
 
         # If unhappy, move - considering the movement quota and whether the agent is type0 or type1:
+        movementQuotaCheck = self.model.movementQuota*self.model.schedule.get_agent_count()
         if happyBool == False:
-            if self.model.movementQuotaCount <= self.model.movementQuota*self.model.schedule.get_agent_count():
+            if self.model.movementQuotaCount <= movementQuotaCheck:
                 self.model.grid.move_to_empty(self)
                 self.model.movementQuotaCount += 1
+                # Update happiness status after move:
+                self.happy_check()
 
     def happy_check(self):
 
@@ -85,7 +90,7 @@ class Schelling(Model):
     This class has been modified from the original model of mesa. Complexity has been added such that the model be used with a model of the policy making process.
     '''
 
-    def __init__(self, height=20, width=20, density=0.8, minority_pc=0.2, homophilyType0=0.3, homophilyType1=0.3, movementQuota=0.30, happyCheckRadius=5, moveCheckRadius=5):
+    def __init__(self, height=20, width=20, density=0.8, minority_pc=0.2, homophilyType0=0.5, homophilyType1=0.5, movementQuota=0.30, happyCheckRadius=5, moveCheckRadius=5):
         '''
         '''
 
@@ -103,14 +108,15 @@ class Schelling(Model):
         self.grid = SingleGrid(height, width, torus=True)
 
         self.happy = 0
+        self.evenness = 0
         self.empty = 0
         self.type0agents = 0
         self.type1agents = 0
         self.movementQuotaCount = 0
+        self.numberOfAgents = 0
         self.datacollector = DataCollector(
             # Model-level count of happy agents
-            {"happy": "happy", "empty": "empty"},
-             # Model-level count of empty cells
+            {"happy": "happy", "numberOfAgents": "numberOfAgents" },
             # For testing purposes, agent's individual x and y
             {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]})
 
@@ -133,12 +139,15 @@ class Schelling(Model):
         print("Schedule", len(self.schedule.agents))
 
         self.running = True
+        self.numberOfAgents = self.schedule.get_agent_count()
         self.datacollector.collect(self)
 
 
     def step(self):
         '''
         Run one step of the model. If All agents are happy, halt the model.
+        Note on the eveness paramater calculation:
+            It cannot be performed in the step function of the agents as then it would not take consider periods of time during which the agents are still moving, making the parameter calculation inaccurate. 
         '''
         self.happy = 0  # Reset counter of happy agents
         self.empty = 0  # Reset counter of empty cells
@@ -147,7 +156,6 @@ class Schelling(Model):
         self.movementQuotaCount = 0
 
         # run the step for the agents
-
         self.schedule.step()
         print(self.movementQuotaCount, " agents moved.")
         print(round(self.happy/self.schedule.get_agent_count() * 100,2), " are happy agents.")
@@ -160,6 +168,25 @@ class Schelling(Model):
                 self.type0agents += 1
             if agent.type == 1:
                 self.type1agents += 1
+
+        # Updating the evenness parameter
+        # Getting the agents into a list
+        listAgents = list(self.schedule._agents.items())
+        evenness = 0
+        # Number of type 0 and type 1 agents:
+
+        for agents in self.schedule.agent_buffer(shuffled=True):
+            test = agents.model.grid.get_neighbors(listAgents[agents][1].pos, True, False, 1)
+            print(test)
+
+        for agents in range(len(listAgents)):
+            # print(listAgents[agents][1].pos)
+            neighborList1 = listAgents[agents][1].model.grid.get_neighbors(listAgents[agents][1].pos, True, False, 1)
+            # print("  ")
+            # for agents1 in neighborList1:
+            #     print(agents1.type)
+        print("Length: ",len(listAgents))
+        # print(listAgents[1][1].pos)
 
 
         # collect data
