@@ -108,6 +108,7 @@ class Schelling(Model):
         self.grid = SingleGrid(height, width, torus=True)
 
         self.happy = 0
+        self.stepCount = 0
         self.evenness = 0
         self.empty = 0
         self.type0agents = 0
@@ -116,7 +117,7 @@ class Schelling(Model):
         self.numberOfAgents = 0
         self.datacollector = DataCollector(
             # Model-level count of happy agents
-            {"happy": "happy", "evenness": "evenness", "numberOfAgents": "numberOfAgents" },
+            {"step": "stepCount", "happy": "happy", "evenness": "evenness", "numberOfAgents": "numberOfAgents"},
             # For testing purposes, agent's individual x and y
             {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]})
 
@@ -169,6 +170,9 @@ class Schelling(Model):
             if agent.type == 1:
                 self.type1agents += 1
 
+        self.evenness_calculation()
+
+        '''
         # Updating the evenness parameter
         # Equation of the evenness parameter can be found in Haw (2015)
         # Getting the agents into a list
@@ -185,11 +189,15 @@ class Schelling(Model):
                 if neighbors.type == 1:
                     countType1agents += 1
             # Updating the evenness sum for this agent:
+            # print(abs((countType0agents/self.type0agents) - (countType1agents/self.type1agents)))
             self.evenness += abs((countType0agents/self.type0agents) - (countType1agents/self.type1agents))
+            print(self.evenness)
         self.evenness = 0.5 * self.evenness
-        #For purposes of plotting:
-        self.evenness = 50 * self.evenness
-        # print('evenness: ', self.evenness)
+        print('EVENNESS: ', self.evenness)
+        '''
+
+        # iterate the steps counter
+        self.stepCount += 1
 
         # collect data
         self.datacollector.collect(self)
@@ -197,3 +205,41 @@ class Schelling(Model):
         if self.happy == self.schedule.get_agent_count():
             self.running = False
             print("All agents are happy, the simulation ends!")
+
+    def evenness_calculation(self):
+
+        print("nothing")
+
+        '''
+        To calculate the evenness parameter, one needs to first subdivide the grid into areas of more than one square each. The evenness will be then calculated based on the distribution of type 0 and type 1 agents in each of these areas.
+        The division into area needs to be done carefully as it depends on the inputs within the model (width and height of the grid).
+        '''
+
+        # Make sure the grid is a square:
+        if self.height != self.width:
+            self.running = False
+            print("WARNING - The grid is not a square, please insert the same width and height")
+
+        # print(Next step)
+
+        n = 5
+        if self.height % n == 0:
+            # Consider all areas
+            for number_areas in range(int(self.height/n + self.width/n)):
+                print("New area, number: ", number_areas)
+                listAgentsArea = []
+                for dy in range(int(self.height/n)):
+                    for dx in range(int(self.height/n)):
+                        # print("y: ", self.height/n * number_areas + dy, ", x: ", self.height/n * number_areas + dx)
+                        for agents in self.schedule.agent_buffer(shuffled=True):
+                            if agents.pos == (self.height/n * number_areas + dx, self.height/n * number_areas + dy):
+                                listAgentsArea.append(agents)
+                print("Number of agents: ", len(listAgentsArea))
+
+
+            
+        # NOT ENOUGH AREAS ARE PRESENT. THERE SHOULD BE 
+
+
+
+
