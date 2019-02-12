@@ -137,7 +137,7 @@ class Schelling(Model):
                 agent = SchellingAgent((x, y), self, agent_type)
                 self.grid.position_agent(agent, (x, y))
                 self.schedule.add(agent)
-        print("Schedule: ", len(self.schedule.agents))
+        print("Schedule", len(self.schedule.agents))
 
         self.running = True
         self.numberOfAgents = self.schedule.get_agent_count()

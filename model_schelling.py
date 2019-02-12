@@ -4,7 +4,7 @@ from mesa.space import SingleGrid
 from mesa.datacollection import DataCollector
 
 '''
-Optional for coupling:
+Optional for coupling of the Schelling model
 - Migration
     - The net amount of agent change per step needs to be zero.
     - Random agents are removed? Or unhappy agents? It should be unhappy ones - that makes more sense at least.
@@ -86,8 +86,8 @@ class SchellingAgent(Agent):
 
 class Schelling(Model):
     '''
-    Model class for the Schelling segregation model.
-    This class has been modified from the original model of mesa. Complexity has been added such that the model be used with a model of the policy making process.
+    Model class for the SM coupled to the Schelling segregation model.
+    This class has been modified from the original mesa Schelling model.
     '''
 
     def __init__(self, height=20, width=20, density=0.8, minority_pc=0.2, homophilyType0=0.5, homophilyType1=0.5, movementQuota=0.30, happyCheckRadius=5, moveCheckRadius=5):
@@ -137,7 +137,7 @@ class Schelling(Model):
                 agent = SchellingAgent((x, y), self, agent_type)
                 self.grid.position_agent(agent, (x, y))
                 self.schedule.add(agent)
-        print("Schedule", len(self.schedule.agents))
+        print("Schedule: ", len(self.schedule.agents))
 
         self.running = True
         self.numberOfAgents = self.schedule.get_agent_count()
