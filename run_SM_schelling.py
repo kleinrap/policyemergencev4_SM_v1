@@ -9,7 +9,7 @@ Ultimately, the two models should be initialised and then their for loops should
 '''
 
 # running the policy emergence Simplest Model
-model_run_SM = PolicyEmergenceSM(20,20)
+model_run_SM = PolicyEmergenceSM(10,10)
 
 '''
 # running the Schelling model:
