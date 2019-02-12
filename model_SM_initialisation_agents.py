@@ -5,6 +5,11 @@ from model_SM_active_agents import ActiveAgent
 
 def init_active_agents(self):
 
+	# belief tree properties
+	len_S = 7
+	len_PC = 3
+	len_DC = 1
+
 	# policy maker 1
 	x = 0
 	y = 0
