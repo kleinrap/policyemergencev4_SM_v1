@@ -154,47 +154,24 @@ class Schelling(Model):
         self.empty = 0  # Reset counter of empty cells
         self.type0agents = 0  # Reset count of type 0 agents
         self.type1agents = 0  # Reset count of type 1 agents
-        self.movementQuotaCount = 0
+        self.movementQuotaCount = 0  # Reset count of the movement quota
 
         # run the step for the agents
         self.schedule.step()
         print(self.movementQuotaCount, " agents moved.")
-        print(round(self.happy/self.schedule.get_agent_count() * 100,2), " are happy agents.")
+        print(round(self.happy/self.schedule.get_agent_count() * 100,2), "percent are happy agents.")
 
-        # Calculating empty counter
+        # calculating empty counter
         self.empty = (self.height*self.width) - self.schedule.get_agent_count()
-        # Calculating type 0 and type 1 agent numbers
+        # calculating type 0 and type 1 agent numbers
         for agent in self.schedule.agent_buffer(shuffled=True):
             if agent.type == 0:
                 self.type0agents += 1
             if agent.type == 1:
                 self.type1agents += 1
 
+        # calculation of evenness (segregation parameter) using Haw (2015).
         self.evenness_calculation()
-
-        '''
-        # Updating the evenness parameter
-        # Equation of the evenness parameter can be found in Haw (2015)
-        # Getting the agents into a list
-        listAgents = list(self.schedule._agents.items())
-        self.evenness = 0
-        # Iterating through all agents
-        for agents in self.schedule.agent_buffer(shuffled=True):
-            neighborList = agents.model.grid.get_neighbors(agents.pos, True, False, 1)
-            countType0agents = 0
-            countType1agents = 0
-            for neighbors in neighborList:
-                if neighbors.type == 0:
-                    countType0agents += 1
-                if neighbors.type == 1:
-                    countType1agents += 1
-            # Updating the evenness sum for this agent:
-            # print(abs((countType0agents/self.type0agents) - (countType1agents/self.type1agents)))
-            self.evenness += abs((countType0agents/self.type0agents) - (countType1agents/self.type1agents))
-            print(self.evenness)
-        self.evenness = 0.5 * self.evenness
-        print('EVENNESS: ', self.evenness)
-        '''
 
         # iterate the steps counter
         self.stepCount += 1
@@ -208,38 +185,40 @@ class Schelling(Model):
 
     def evenness_calculation(self):
 
-        print("nothing")
-
         '''
         To calculate the evenness parameter, one needs to first subdivide the grid into areas of more than one square each. The evenness will be then calculated based on the distribution of type 0 and type 1 agents in each of these areas.
         The division into area needs to be done carefully as it depends on the inputs within the model (width and height of the grid).
         '''
 
-        # Make sure the grid is a square:
+        # check for a square grid
         if self.height != self.width:
             self.running = False
             print("WARNING - The grid is not a square, please insert the same width and height")
 
-        # print(Next step)
+        # reset the evenness parameter
+        self.evenness = 0
 
-        n = 5
+        # algorithm to calculate evenness
+        n = 4  # number of big areas considered in width and height
         if self.height % n == 0:
-            # Consider all areas
-            for number_areas in range(int(self.height/n + self.width/n)):
-                print("New area, number: ", number_areas)
-                listAgentsArea = []
-                for dy in range(int(self.height/n)):
-                    for dx in range(int(self.height/n)):
-                        # print("y: ", self.height/n * number_areas + dy, ", x: ", self.height/n * number_areas + dx)
-                        for agents in self.schedule.agent_buffer(shuffled=True):
-                            if agents.pos == (self.height/n * number_areas + dx, self.height/n * number_areas + dy):
-                                listAgentsArea.append(agents)
-                print("Number of agents: ", len(listAgentsArea))
-
-
-            
-        # NOT ENOUGH AREAS ARE PRESENT. THERE SHOULD BE 
-
-
-
-
+            # consider all big areas
+            for big_dy in range(n):
+                for big_dx in range(n):
+                    # looking within one big areas, going through all cells
+                    listAgents = []
+                    for small_dy in range(int(self.height/n)):
+                        for small_dx in range(int(self.height/n)):
+                            for agents in self.schedule.agent_buffer(shuffled=True):
+                                if agents.pos == (self.height/n * big_dx + small_dx, self.height/n * big_dy + small_dy):
+                                    listAgents.append(agents)
+                    # calculating evenness for each big area
+                    countType0agents = 0  # Reset of the type counter for type 0 agents
+                    countType1agents = 0  # Reset of the type counter for type 1 agents
+                    # checking the type of agents in the big area
+                    for agents in listAgents:
+                        if agents.type == 0:
+                            countType0agents += 1
+                        if agents.type == 1:
+                            countType1agents += 1
+                    self.evenness += 0.5 * abs((countType0agents/self.type0agents) - (countType1agents/self.type1agents))
+        print("evenness :", round(self.evenness,2))

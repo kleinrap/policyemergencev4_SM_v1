@@ -12,7 +12,7 @@ for i in range(100):
 dataPlot = model_run.datacollector.get_model_vars_dataframe()
 
 print(dataPlot)
-# dataPlot.plot("step", "evenness")
+dataPlot.plot("step", "evenness")
 dataPlot.plot("step", "happy")
 
 # dataPlot.plot()
