@@ -1,10 +1,10 @@
 TO DO file for the policy emergence model
 
 1. Initialisation of the model
-	- Type of agent
-	- Positioning of the agents
-	- Resources of the agents
-	- Affiliations
+	- Type of agent (done)
+	- Positioning of the agents (done)
+	- Resources of the agents (done)
+	- Affiliations (done)
 	- Belief tree of the agents
 	- Issue tree of the agents
 

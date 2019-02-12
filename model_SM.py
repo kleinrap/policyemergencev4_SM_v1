@@ -53,6 +53,9 @@ class PolicyEmergenceSM(Model):
 		print("Schedule: ", len(self.schedule.agents))
 		print(self.schedule.agents)
 
+		for agent in self.schedule.agent_buffer(shuffled=False):
+			print(agent.pos, " ", agent.agent_type, " ", agent.resources, " ", agent.affiliation)
+
 		self.running = True
 		self.numberOfAgents = self.schedule.get_agent_count()
 		self.datacollector.collect(self)
