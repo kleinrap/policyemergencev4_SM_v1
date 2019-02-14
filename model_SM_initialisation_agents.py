@@ -6,12 +6,12 @@ from model_SM_active_agents import ActiveAgent
 def init_active_agents(self):
 
 	# belief tree properties
-	len_S = 4
-	len_S_names = ["vision", "movement", "type0preferences", "type1preferences"]
-	len_PC = 2
+	len_S_names = ["vision", "movement", "last_movement", "type0preferences", "type1preferences"]
+	len_S = len(len_S_names)
 	len_PC_names = ["freedom", "preferences"]
-	len_DC = 1 
+	len_PC = len(len_PC_names)
 	len_DC_names = ["evenness"]
+	len_DC = len(len_DC_names)
 	number_causalrelation = len_DC*len_PC + len_PC*len_S
 
 	# issue tree properties
@@ -65,6 +65,7 @@ def init_active_agents(self):
 			policytree_empty_agents[len_PC+m] = [None for f in range(len_S)]
 		policytree0.append(policytree_empty_agents)
 
+	# creation of the agents
 	# policy maker 1
 	x = 0
 	y = 0

@@ -20,19 +20,21 @@ Things that might be needed:
 KPIs:
 What needs to be recorded (KPIs):
 Empty cells -- Implemented
-Green cells (type 0) -- Implemented
-Blue cells (type 1) -- Implemented
+Type 0 -- Implemented
+Type 1 -- Implemented
 Vision - Global - Implemented
 Movement - Global - Implemented
-Green homophily - Implemented
-Blue homophily - Implemented
+Last movement (agent individual) - Not implemented
+Type 0 homophily - Implemented
+Type 1 homophily - Implemented
+
 '''
 
 class SchellingAgent(Agent):
     '''
     Schelling segregation agent
     '''
-    def __init__(self, pos, model, agent_type):
+    def __init__(self, pos, model, agent_type, last_move):
         '''
          Create a new Schelling agent.
          Args:
@@ -43,20 +45,29 @@ class SchellingAgent(Agent):
         super().__init__(pos, model)
         self.pos = pos
         self.type = agent_type
+        self.last_move = last_move
 
     def step(self):
 
         # Checking if the agent is happy
         happyBool = self.happy_check()
 
+        # Increment last move parameter
+        self.last_move += 1
+
         # If unhappy, move - considering the movement quota and whether the agent is type0 or type1:
         movementQuotaCheck = self.model.movementQuota*self.model.schedule.get_agent_count()
         if happyBool == False:
             if self.model.movementQuotaCount <= movementQuotaCheck:
-                self.model.grid.move_to_empty(self)
-                self.model.movementQuotaCount += 1
-                # Update happiness status after move:
-                self.happy_check()
+                # check if the agent has not moved within the last X rounds
+                if self.last_move > self.model.last_move_quota: 
+                    self.model.grid.move_to_empty(self)
+                    self.model.movementQuotaCount += 1
+                    # Update happiness status after move
+                    self.happy_check()
+                    # reset the movement parameter for the agent
+                    self.last_move = 0
+
 
     def happy_check(self):
 
@@ -91,7 +102,7 @@ class Schelling(Model):
     This class has been modified from the original mesa Schelling model.
     '''
 
-    def __init__(self, height=20, width=20, density=0.8, minority_pc=0.2, homophilyType0=0.5, homophilyType1=0.5, movementQuota=0.30, happyCheckRadius=5, moveCheckRadius=10):
+    def __init__(self, height=20, width=20, density=0.8, minority_pc=0.2, homophilyType0=0.5, homophilyType1=0.5, movementQuota=0.30, happyCheckRadius=5, moveCheckRadius=10, last_move_quota=5):
         '''
         '''
 
@@ -104,6 +115,7 @@ class Schelling(Model):
         self.movementQuota = movementQuota
         self.happyCheckRadius = happyCheckRadius
         self.moveCheckRadius = moveCheckRadius
+        self.last_move_quota = last_move_quota
 
         self.schedule = RandomActivation(self)
         self.grid = SingleGrid(height, width, torus=True)
@@ -135,7 +147,8 @@ class Schelling(Model):
                 else:
                     agent_type = 0
 
-                agent = SchellingAgent((x, y), self, agent_type)
+                last_move = round(self.random.random()*10)  # randomly assign a value from 0 to 10
+                agent = SchellingAgent((x, y), self, agent_type, last_move)
                 self.grid.position_agent(agent, (x, y))
                 self.schedule.add(agent)
         print("Schedule: ", len(self.schedule.agents))
