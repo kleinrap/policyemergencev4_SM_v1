@@ -1,16 +1,26 @@
 TO DO file for the policy emergence model
 
-1. Initialisation of the model
+1. Coding in of the agents
 	- Type of agent (done)
 	- Positioning of the agents (done)
 	- Resources of the agents (done)
 	- Affiliations (done)
-	- Belief tree of the agents
-	- Issue tree of the agents
+	- Issue tree of the agents (done)
+	- Policy tree of the agents (done)
+	- Initialisation of the model
+		- Issue tree initialisation
+		- Policy tree initialisation
+	- Preferences calculations in the issue tree
 
 2. Agenda setting step without actions
+	- Agent-specific selection of issues (PC)
+	- Agent-specific selection of policies (PF)
+	- Creation of the agenda
 
 3. Policy formulation step without actions
+	- Agent-specific selection of issues (S)
+	- Agent-specific selection of policies (PI)
+	- Selection of the policy to be implemented 
 
 4. Policy network introduction
 

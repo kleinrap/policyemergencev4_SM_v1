@@ -50,11 +50,11 @@ class PolicyEmergenceSM(Model):
 		# Set up agents (manually for now)
 		init_active_agents(self)
 
-		print("Schedule: ", len(self.schedule.agents))
+		print("Schedule has : ", len(self.schedule.agents), " agents.")
 		print(self.schedule.agents)
 
 		for agent in self.schedule.agent_buffer(shuffled=False):
-			print(agent.pos, " ", agent.agent_type, " ", agent.resources, " ", agent.affiliation)
+			print(agent.ID, " ", agent.pos, " ", agent.agent_type, " ", agent.resources, " ", agent.affiliation, " ", agent.issuetree[0][0], " ", agent.policytree[0][2])
 
 		self.running = True
 		self.numberOfAgents = self.schedule.get_agent_count()

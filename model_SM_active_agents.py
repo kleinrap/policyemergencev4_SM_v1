@@ -7,7 +7,7 @@ class ActiveAgent(Agent):
     '''
     Active agents, including policy makers, policy entrepreneurs and external parties.
     '''
-    def __init__(self, pos, model, agent_type, resources, affiliation):
+    def __init__(self, pos, ID, model, agent_type, resources, affiliation, issuetree, policytree):
         '''
          Create a new Schelling agent.
          Args:
@@ -17,6 +17,9 @@ class ActiveAgent(Agent):
         '''
         super().__init__(pos, model)
         self.pos = pos  # defines the position of the agent on the grid
+        self.ID = ID  # ID of the agent used for algorithmic reasons
         self.agent_type = agent_type  # defines the type of agents from policymaker, policyentrepreneur and externalparty
         self.resources = resources  # resources used for agents to perform actions
         self.affiliation = affiliation  # political affiliation affecting agent interactions
+        self.issuetree = issuetree  # issue tree of the agent (including partial issue of other agents)
+        self.policytree = policytree

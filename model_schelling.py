@@ -15,6 +15,7 @@ Optional for coupling of the Schelling model
 
 Things that might be needed:
 - Move the happiness KPI calculation to after the step function. Right now, the calculation is slightly inaccurate as it is done throughout the simulation itself and not at its end.
+- Add a radius to moving the agents
 
 KPIs:
 What needs to be recorded (KPIs):
@@ -90,7 +91,7 @@ class Schelling(Model):
     This class has been modified from the original mesa Schelling model.
     '''
 
-    def __init__(self, height=20, width=20, density=0.8, minority_pc=0.2, homophilyType0=0.5, homophilyType1=0.5, movementQuota=0.30, happyCheckRadius=5, moveCheckRadius=5):
+    def __init__(self, height=20, width=20, density=0.8, minority_pc=0.2, homophilyType0=0.5, homophilyType1=0.5, movementQuota=0.30, happyCheckRadius=5, moveCheckRadius=10):
         '''
         '''
 
