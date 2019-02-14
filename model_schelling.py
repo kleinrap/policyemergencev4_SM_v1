@@ -24,9 +24,12 @@ Type 0 -- Implemented
 Type 1 -- Implemented
 Vision - Global - Implemented
 Movement - Global - Implemented
-Last movement (agent individual) - Not implemented
+Last movement (agent individual) - Implemented
 Type 0 homophily - Implemented
 Type 1 homophily - Implemented
+Evenness - Implemented
+Policy core 1 KPI - Not implemented
+Policy core 2 KPI - Not implemented
 
 '''
 
