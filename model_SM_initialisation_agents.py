@@ -29,8 +29,8 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	# The format for the whole tree is given as - this policy tree is filled with the perception of other agent's policy impacts:
 	# [policytree] = [[policytree_owner],[policytree_agent1],...,[policytree_agentn]]
 	# [policytree_owner] = [[PF1],...,[PFn],[PI1.1],...,[PI1.n],...,[PIn.1],...,[PIn.n]]
-	# [PF1] = [PC1,...,PCn]
-	# [PI1.1] = [S1,...,Sn]
+	# [PF1] = [PC1,...,PCn, Preference]
+	# [PI1.1] = [S1,...,Sn, Preference]
 	policytree0 = [None]
 	policytree0[0] = [[0] for f in range(len_PF + len_ins_1 + len_ins_2)]
 	for n in range(len_PC):
@@ -80,18 +80,18 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	issuetree[unique_id][19][0] = -0.5  # PC2 - S5
 	policytree = copy.deepcopy(policytree0)
 	# policy families
-	policytree[unique_id][0] = [1, 1]  # PF1 - PC1,PC2
-	policytree[unique_id][1] = [1, 1] # PF2 - PC1, PC2
-	policytree[unique_id][2] = [-1, -1, -1 ,-1 ,-1]  # PI1.1 - S1,S2,S3,S4,S5
-	policytree[unique_id][3] = [-1, -1, -1 ,-1 ,-1]  # PI1.2 - S1,S2,S3,S4,S5
-	policytree[unique_id][4] = [-1, -1, -1 ,-1 ,-1]  # PI1.3 - S1,S2,S3,S4,S5
-	policytree[unique_id][5] = [-1, -1, -1 ,-1 ,-1]  # PI1.4 - S1,S2,S3,S4,S5
-	policytree[unique_id][6] = [-1, -1, -1 ,-1 ,-1]  # PI2.1 - S1,S2,S3,S4,S5
-	policytree[unique_id][7] = [-1, -1, -1 ,-1 ,-1]  # PI2.2 - S1,S2,S3,S4,S5
-	policytree[unique_id][8] = [-1, -1, -1 ,-1 ,-1]  # PI2.3 - S1,S2,S3,S4,S5
-	policytree[unique_id][9] = [-1, -1, -1 ,-1 ,-1]  # PI2.4 - S1,S2,S3,S4,S5
-	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
-	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
+	policytree[unique_id][0] = [1, 1, None]  # PF1 - PC1,PC2
+	policytree[unique_id][1] = [1, 1, None] # PF2 - PC1, PC2
+	policytree[unique_id][2] = [-1, -1, -1 ,-1 ,-1, None]  # PI1.1 - S1,S2,S3,S4,S5
+	policytree[unique_id][3] = [-1, -1, -1 ,-1 ,-1, None]  # PI1.2 - S1,S2,S3,S4,S5
+	policytree[unique_id][4] = [-1, -1, -1 ,-1 ,-1, None]  # PI1.3 - S1,S2,S3,S4,S5
+	policytree[unique_id][5] = [-1, -1, -1 ,-1 ,-1, None]  # PI1.4 - S1,S2,S3,S4,S5
+	policytree[unique_id][6] = [-1, -1, -1 ,-1 ,-1, None]  # PI2.1 - S1,S2,S3,S4,S5
+	policytree[unique_id][7] = [-1, -1, -1 ,-1 ,-1, None]  # PI2.2 - S1,S2,S3,S4,S5
+	policytree[unique_id][8] = [-1, -1, -1 ,-1 ,-1, None]  # PI2.3 - S1,S2,S3,S4,S5
+	policytree[unique_id][9] = [-1, -1, -1 ,-1 ,-1, None]  # PI2.4 - S1,S2,S3,S4,S5
+	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1, None]  # PI2.5 - S1,S2,S3,S4,S5
+	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1, None]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
 	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))

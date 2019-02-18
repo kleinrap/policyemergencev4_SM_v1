@@ -47,9 +47,9 @@ class PolicyEmergenceSM(Model):
 		self.len_PF = self.len_PC
 		self.len_PF_names = self.len_PC_names
 		self.len_ins_1 = 4
-		self.len_ins_1_names = ["TBD", "TBD", "TBD", "TBD"]
+		self.len_ins_1_names = ["Vision", "TBD", "TBD", "TBD"]
 		self.len_ins_2 = 6
-		self.len_ins_2_names = ["TBD", "TBD", "TBD", "TBD", "TBD", "TBD"]
+		self.len_ins_2_names = ["Vision+", "Vision-", "Movement+", "Movement-", "Pref+", "Pref-"]
 
 		# agent global properties
 		self.number_activeagents = 10
@@ -134,7 +134,7 @@ class PolicyEmergenceSM(Model):
 		6. Agenda selection
 		'''
 
-		print("Agent setting not introduced yet")
+		print("Agent setting step is incomplete for now")
 
 		# 1. & 2.
 		for agent in self.schedule.agent_buffer(shuffled=False):
@@ -167,6 +167,16 @@ class PolicyEmergenceSM(Model):
 
 
 	def policy_formulation(self):
+
+		'''
+		The policy formulation step is the second step in the policy process conceptualised in this model. The steps are given as follows:
+		1. Active agents policy core issue selection
+		2. Active agents policy family selection
+		3. Active agents actions [to be detailed later]
+		4. Active agents policy core issue selection update
+		5. Active agents policy family selection update
+		6. Agenda selection
+		'''
 
 		print("Policy formulation not introduced yet")
 
