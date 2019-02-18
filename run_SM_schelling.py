@@ -11,6 +11,9 @@ Ultimately, the two models should be initialised and then their for loops should
 # running the policy emergence Simplest Model
 model_run_SM = PolicyEmergenceSM(10,10)
 
+for i in range(5):
+	model_run_SM.step()
+
 '''
 # running the Schelling model:
 model_run_schelling = Schelling(20, 20, 0.75, 0.4)

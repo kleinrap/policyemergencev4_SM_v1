@@ -23,6 +23,36 @@ class ActiveAgent(Agent):
         self.issuetree = issuetree  # issue tree of the agent (including partial issue of other agents)
         self.policytree = policytree
 
+        # selected issues and policies
+        self.selected_PC = None
+        self.selected_PF = None
+        self.selected_S = None
+        self.selected_PI = None
+
+    def selection_PC(self):
+
+        '''
+        This function is used to select the preferred policy core issue for the active agents based on all their preferences for the policy core issues.
+        '''
+
+        # compiling all the preferences
+        PC_pref_list = [None for k in range(self.model.len_PC)]
+        for i in range(self.model.len_PC):
+            PC_pref_list[i] = self.issuetree[self.unique_id][self.model.len_DC + i][2]
+
+        # assigning the highest preference as the selected policy core issue
+        self.selected_PC = self.model.len_DC + PC_pref_list.index(max(PC_pref_list))
+
+    def selection_PF(self):
+        print("Selection PF not implemented yet")
+
+    def selection_S(self):
+        print("Selection S not implemented yet")
+
+    def selection_PI(self):
+        print("Selection PI not implemented yet")
+
+
 class ElectorateAgent(Agent):
     '''
     Electorate agents.

@@ -19,6 +19,9 @@ class PolicyEmergenceSM(Model):
 		self.width = width
 
 		self.stepCount = 0
+		self.agenda_PC = None
+		self.agenda_PF = None
+		self.policy_implemented = None
 
 		self.schedule = RandomActivation(self)
 		self.grid = SingleGrid(height, width, torus=True)
@@ -77,6 +80,96 @@ class PolicyEmergenceSM(Model):
 		self.running = True
 		self.numberOfAgents = self.schedule.get_agent_count()
 		self.datacollector.collect(self)
+
+	def step(self):
+		print(" ")
+		print("step me")
+
+		'''
+		Main steps of the Simplest Model for policy emergence:
+		0. Module interface - Input
+			Obtention of the beliefs from the system/policy context
+			!! This is to be implemented at a later s
+		1. Agenda setting step
+		2. Policy formulation step
+		3. Module interface - Output
+			Implementation of the policy instrument selected
+		'''
+
+		# 0.
+		self.module_interface_input()
+
+		# 1.
+		self.agenda_setting()
+
+		# 2.
+		self.policy_formulation()
+
+		# 3.
+		self.module_interface_output()
+
+
+		# end of step actions:
+		# iterate the steps counter
+		self.stepCount += 1
+
+		# collect data
+		self.datacollector.collect(self)
+
+	def module_interface_input(self):
+
+		print("Module interface output not introduced yet")
+
+	def agenda_setting(self):
+
+		'''
+		The agenda setting step is the first step in the policy process conceptualised in this model. The steps are given as follows:
+		1. Active agents policy core issue selection
+		2. Active agents policy family selection
+		3. Active agents actions [to be detailed later]
+		4. Active agents policy core issue selection update
+		5. Active agents policy family selection update
+		6. Agenda selection
+		'''
+
+		print("Agent setting not introduced yet")
+
+		# 1. & 2.
+		for agent in self.schedule.agent_buffer(shuffled=False):
+			if isinstance(agent, ActiveAgent):  # considering only active agents
+				agent.selection_PC()
+				agent.selection_PF()
+
+		# 3.
+
+		# 4. & 5.
+		for agent in self.schedule.agent_buffer(shuffled=False):
+			if isinstance(agent, ActiveAgent):  # considering only active agents
+				agent.selection_PC()
+				agent.selection_PF()
+
+		# 6. 
+		selected_PC_list = []
+		selected_PF_list = []
+		for agent in self.schedule.agent_buffer(shuffled=False):
+			if isinstance(agent, ActiveAgent):  # considering only active agents
+				selected_PC_list.append(agent.selected_PC)
+				selected_PF_list.append(agent.selected_PF)
+
+
+		self.agenda_PC = None
+		self.agenda_PF = None
+
+
+
+	def policy_formulation(self):
+
+		print("Policy formulation not introduced yet")
+
+	def module_interface_output(self):
+
+		print("Module interface output not introduced yet")
+
 
 	def preference_udapte(self, agent, who):
 

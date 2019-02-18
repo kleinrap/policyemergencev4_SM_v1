@@ -142,6 +142,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
 	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -192,6 +193,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
 	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -240,6 +242,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
 	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -288,6 +291,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
 	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -336,6 +340,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
 	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -384,6 +389,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
 	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -432,6 +438,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
 	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -480,6 +487,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
 	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -528,6 +536,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	policytree[unique_id][10] = [-1, -1, -1 ,-1 ,-1]  # PI2.5 - S1,S2,S3,S4,S5
 	policytree[unique_id][11] = [-1, -1, -1 ,-1 ,-1]  # PI2.6 - S1,S2,S3,S4,S5
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
