@@ -3,27 +3,9 @@ from mesa.time import RandomActivation
 from mesa.space import SingleGrid
 from mesa.datacollection import DataCollector
 
-from model_SM_initialisation_agents import init_active_agents
-from model_SM_active_agents import ActiveAgent
+from model_SM_initialisation_agents import init_active_agents, init_electorate_agents, init_truth_agent
+from model_SM_agents import ActiveAgent, ElectorateAgent, TruthAgent
 
-
-
-
-class TruthAgent(Agent):
-    '''
-    Truth agent used for the purpose of the simulation only.
-    '''
-    def __init__(self, pos, model, agent_type):
-        '''
-         Create a new Schelling agent.
-         Args:
-            unique_id: Unique identifier for the agent.
-            x, y: Agent initial location.
-            agent_type: Indicator for the agent's type (minority=1, majority=0)
-        '''
-        super().__init__(pos, model)
-        self.pos = pos
-        self.type = agent_type
 
 class PolicyEmergenceSM(Model):
 
@@ -73,11 +55,24 @@ class PolicyEmergenceSM(Model):
 		# Set up passive agents (manually for now)
 		init_electorate_agents(self, self.len_S, self.len_PC, self.len_DC)
 
+		# Set up truth agent
+		init_truth_agent(self, self.len_S, self.len_PC, self.len_DC)
+		# the issue tree will need to be updated at a later stage witht he values from the system/policy context
+
 		print("Schedule has : ", len(self.schedule.agents), " agents.")
 		print(self.schedule.agents)
+		print(" ")
 
 		for agent in self.schedule.agent_buffer(shuffled=False):
-			print(agent.ID, " ", agent.pos, " ", agent.agent_type, " ", agent.resources, " ", agent.affiliation, " ", agent.issuetree[agent.ID], " ", agent.policytree[agent.ID][0])
+			print(' ')
+			print(agent)
+			print(type(agent))
+			if isinstance(agent, ActiveAgent):
+				print(agent.unique_id, " ", agent.pos, " ", agent.agent_type, " ", agent.resources, " ", agent.affiliation, " ", agent.issuetree[agent.unique_id], " ", agent.policytree[agent.unique_id][0])
+			if isinstance(agent, ElectorateAgent):
+				print(agent.unique_id, " ", agent.pos, " ", agent.affiliation, " ", agent.issuetree)
+			if isinstance(agent, TruthAgent):
+				print(agent.pos, " ", agent.issuetree)
 
 		self.running = True
 		self.numberOfAgents = self.schedule.get_agent_count()
@@ -93,7 +88,7 @@ class PolicyEmergenceSM(Model):
 		respective belief trees.
 
 		agent - this is the owner of the belief tree
-		who - this is the part of the belieftree that is considered - agent.ID should be used for this - this is done to also include partial knowledge preference calculation
+		who - this is the part of the belieftree that is considered - agent.unique_id should be used for this - this is done to also include partial knowledge preference calculation
 
 		"""	
 
@@ -132,9 +127,6 @@ class PolicyEmergenceSM(Model):
 			# Selecting the causal relations starting from PC
 			for k in range(len_DC):
 				# Contingency for partial knowledge issues
-				
-
-				print(agent.issuetree[who][len_DC+len_PC+len_S+j+(k*len_PC)-1][0])
 				if agent.issuetree[who][k][1] == None or agent.issuetree[who][k][0] == None or agent.issuetree[who][len_DC+len_PC+len_S+j+(k*len_PC)][0] == None:
 					ML_denominator = 0
 				else:
