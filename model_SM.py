@@ -3,6 +3,8 @@ from mesa.time import RandomActivation
 from mesa.space import SingleGrid
 from mesa.datacollection import DataCollector
 
+from collections import defaultdict
+
 from model_SM_initialisation_agents import init_active_agents, init_electorate_agents, init_truth_agent
 from model_SM_agents import ActiveAgent, ElectorateAgent, TruthAgent
 
@@ -149,15 +151,17 @@ class PolicyEmergenceSM(Model):
 				agent.selection_PF()
 
 		# 6. 
+		# Note that the agenda is made ONLY with the policy makers here 
 		selected_PC_list = []
 		selected_PF_list = []
 		for agent in self.schedule.agent_buffer(shuffled=False):
-			if isinstance(agent, ActiveAgent):  # considering only active agents
+			if isinstance(agent, ActiveAgent) and agent.agent_type == 'policymaker':  # considering only policy makers
 				selected_PC_list.append(agent.selected_PC)
 				selected_PF_list.append(agent.selected_PF)
 
+		# finding the most common policy core issue
+		self.agenda_PC = max(set(selected_PC_list), key=selected_PC_list.count)
 
-		self.agenda_PC = None
 		self.agenda_PF = None
 
 

@@ -41,7 +41,7 @@ class ActiveAgent(Agent):
             PC_pref_list[i] = self.issuetree[self.unique_id][self.model.len_DC + i][2]
 
         # assigning the highest preference as the selected policy core issue
-        self.selected_PC = self.model.len_DC + PC_pref_list.index(max(PC_pref_list))
+        self.selected_PC = PC_pref_list.index(max(PC_pref_list))
 
     def selection_PF(self):
         print("Selection PF not implemented yet")
