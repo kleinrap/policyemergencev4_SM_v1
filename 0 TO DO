@@ -16,7 +16,8 @@ TO DO file for the policy emergence model
 
 2. Agenda setting step without actions
 	- Agent-specific selection of issues (PC) (done)
-	- Initialise the policy instruments
+	- Initialise the policy instruments (done)
+	- Calculate impact of policy instruments
 	- Calculate impact of policy families 
 	- Agent-specific selection of policies (PF)
 	- Creation of the agenda

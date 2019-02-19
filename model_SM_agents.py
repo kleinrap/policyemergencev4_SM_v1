@@ -57,7 +57,7 @@ class ElectorateAgent(Agent):
     '''
     Electorate agents.
     '''
-    def __init__(self, pos, unique_id, model, affiliation, issuetree):
+    def __init__(self, pos, unique_id, model, affiliation, issuetree, representativeness):
         '''
          Create a new Electorate agent.
          Args:
@@ -70,12 +70,13 @@ class ElectorateAgent(Agent):
         self.unique_id = unique_id  # unique_id of the agent used for algorithmic reasons
         self.affiliation = affiliation  # political affiliation affecting agent interactions
         self.issuetree = issuetree  # issue tree of the agent (including partial issue of other agents)
+        self.representativeness = representativeness
 
 class TruthAgent(Agent):
     '''
     Truth agents.
     '''
-    def __init__(self, pos, model, issuetree):
+    def __init__(self, pos, model, issuetree, policytree):
         '''
          Create a new Truth agent.
          Args:
@@ -85,4 +86,5 @@ class TruthAgent(Agent):
         super().__init__(pos, model)
         self.pos = pos  # defines the position of the agent on the grid
         self.issuetree = issuetree  # issue tree of the agent (including partial issue of other agents)
+        self.policytree = policytree
     
