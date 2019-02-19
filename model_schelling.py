@@ -13,6 +13,9 @@ Optional for coupling of the Schelling model
     - Where are new agents incoming placed onto the map? Random locations
     - Is there a constant turnover? Or is it a one time thing? Dor policy instruments, it makes more sense to have a continuous turnover of a certain percentage
 
+Things that are needed:
+- The belief tree has been changed - there is a need for the calculation of new KPIs that will fit within the issue tree
+
 Things that might be needed:
 - Move the happiness KPI calculation to after the step function. Right now, the calculation is slightly inaccurate as it is done throughout the simulation itself and not at its end.
 - Add a radius to moving the agents
@@ -30,6 +33,10 @@ Type 1 homophily - Implemented
 Evenness - Implemented
 Policy core 1 KPI - Not implemented
 Policy core 2 KPI - Not implemented
+Happiness of type 0 agents - Not implemented
+Happiness of type 1 agents - Not implemented
+Movement of type 0 agents - Not implemented
+Movement of type 1 agents - Not implemented
 
 '''
 
