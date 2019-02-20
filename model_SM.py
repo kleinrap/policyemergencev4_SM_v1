@@ -7,7 +7,7 @@ from collections import defaultdict
 
 from model_SM_initialisation_agents import init_active_agents, init_electorate_agents, init_truth_agent
 from model_SM_agents import ActiveAgent, ElectorateAgent, TruthAgent
-from model_module_interface import policy_instrument_input
+from model_module_interface import policy_instrument_input, issue_tree_input
 
 
 class PolicyEmergenceSM(Model):
@@ -36,31 +36,16 @@ class PolicyEmergenceSM(Model):
 			{"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]})
 
 		# belief tree properties
-		self.len_S_names = ["movement0", "movement1", "happy0", "happy1"]
-		self.len_S = len(self.len_S_names)
-		self.len_PC_names = ["movement", "happiness"]
-		self.len_PC = len(self.len_PC_names)
-		self.len_DC_names = ["evenness"]
-		self.len_DC = len(self.len_DC_names)
-		self.number_causalrelation = self.len_DC*self.len_PC + self.len_PC*self.len_S
+		self.len_S, self.len_PC, self.len_DC, self.len_CR = issue_tree_input(self)
+		# print(self.len_S, self.len_PC, self.len_DC, self.len_CR)
 
 		# issue tree properties
-		self.len_PF = self.len_PC
-		self.len_PF_names = self.len_PC_names
-		self.len_ins_1 = 6  # Poliy instruments related to policy family 1
-		self.len_ins_1_names = ["Vi-1", "Vi+1", "Mo-5", "Mo+5", "LMo-1", "LMo+1"]
-		self.len_ins_2 = 6  # Poliy instruments related to policy family 2
-		self.len_ins_2_names = ["Vi-1", "Vi+1", "T0P-5", "T0P+5", "T1P-5", "T1P+5"]
-		self.len_ins_exo_names = ["Vi", "Mo", "LMo", "T0P", "T1P"]
-		self.len_ins_exo = len(self.len_ins_exo_names)
-		# input of the policy instrument within the module interface file
-		self.policy_instruments = policy_instrument_input(self, self.len_ins_1, self.len_ins_2, self.len_ins_exo)
+		self.policy_instruments, self.len_ins_1, self.len_ins_2 = policy_instrument_input(self, self.len_PC)
 
-		# agent global properties
-		self.number_activeagents = 10
+		
 
 		# Set up active agents (manually for now)
-		init_active_agents(self, self.len_S, self.len_PC, self.len_DC, self.number_causalrelation, self.len_PF, self.len_ins_1, self.len_ins_2, self.len_ins_exo, self.number_activeagents)
+		init_active_agents(self, self.len_S, self.len_PC, self.len_DC, self.len_CR, self.len_PC, self.len_ins_1, self.len_ins_2)
 
 		# Set up passive agents (manually for now)
 		init_electorate_agents(self, self.len_S, self.len_PC, self.len_DC)

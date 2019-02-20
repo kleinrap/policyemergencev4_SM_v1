@@ -3,7 +3,10 @@ import copy
 
 from model_SM_agents import ActiveAgent, ElectorateAgent, TruthAgent
 
-def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_PF, len_ins_1, len_ins_2, len_ins_exo, number_activeagents):
+def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, len_ins_2):
+
+	# agent global properties
+	number_activeagents = 10
 
 	# model issue tree structure
 	issuetree0 = [None]
@@ -16,12 +19,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, number_causalrelation, len_P
 	# the format of the issue is: [X] = [0, 0, 0] = [beliefs, goals, preferences]
 	issuetree_empty_issues = [[0, 0, 0] for f in range(len_DC + len_PC + len_S)]
 	issuetree_full = issuetree_empty_issues
-	for p in range(number_causalrelation):
+	for p in range(len_CR):
 		issuetree_full.append([0])
 	issuetree0[0] = issuetree_full
 	for r in range(number_activeagents):
 		issuetree_empty_agents = [[None, None, None] for p in range(len_DC + len_PC + len_S)]
-		for f in range(number_causalrelation):
+		for f in range(len_CR):
 			issuetree_empty_agents.append([None])
 		issuetree0.append(issuetree_empty_agents)
 
