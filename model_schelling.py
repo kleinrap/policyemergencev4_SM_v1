@@ -31,12 +31,12 @@ Last movement (agent individual) - Implemented
 Type 0 homophily - Implemented
 Type 1 homophily - Implemented
 Evenness - Implemented
-Policy core 1 KPI - Not implemented
-Policy core 2 KPI - Not implemented
-Happiness of type 0 agents - Not implemented
-Happiness of type 1 agents - Not implemented
-Movement of type 0 agents - Not implemented
-Movement of type 1 agents - Not implemented
+Policy core 1 KPI (movement) - Implemented
+Policy core 2 KPI (happiness) - Implemented
+Happiness of type 0 agents - Implemented
+Happiness of type 1 agents - Implemented
+Movement of type 0 agents - Implemented
+Movement of type 1 agents - Implemented
 
 '''
 
@@ -74,6 +74,7 @@ class SchellingAgent(Agent):
                 if self.last_move > self.model.last_move_quota: 
                     self.model.grid.move_to_empty(self)
                     self.model.movementQuotaCount += 1
+                    self.model.movement += 1
                     if self.type == 0:
                         self.model.movementtype0 += 1
                     if self.type == 1:
@@ -148,13 +149,14 @@ class Schelling(Model):
         self.empty = 0
         self.type0agents = 0
         self.type1agents = 0
+        self.movement = 0
         self.movementtype0 = 0
         self.movementtype1 = 0
         self.movementQuotaCount = 0
         self.numberOfAgents = 0
         self.datacollector = DataCollector(
             # Model-level count of happy agents
-            {"step": "stepCount", "happy": "happy", "happytype0": "happytype0", "happytype1": "happytype1", "movementtype0": "movementtype0", "movementtype1": "movementtype1","evenness": "evenness", "numberOfAgents": "numberOfAgents"},
+            {"step": "stepCount", "happy": "happy", "happytype0": "happytype0", "happytype1": "happytype1", "movement": "movement", "movementtype0": "movementtype0", "movementtype1": "movementtype1","evenness": "evenness", "numberOfAgents": "numberOfAgents"},
             # For testing purposes, agent's individual x and y
             {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]})
 
@@ -195,6 +197,7 @@ class Schelling(Model):
         self.type0agents = 0  # Reset count of type 0 agents
         self.type1agents = 0  # Reset count of type 1 agents
         self.movementQuotaCount = 0  # Reset count of the movement quota
+        self.movement = 0  # Reset counter of movement of agents
         self.movementtype0 = 0  # Reset counter of movement of type 0 agents
         self.movementtype1 = 0  # Reset counter of movement of type 1 agents
 

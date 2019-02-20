@@ -8,30 +8,35 @@ The current architecture is used for test purposes.
 Ultimately, the two models should be initialised and then their for loops should be intertwined.
 '''
 
-# running the policy emergence Simplest Model
-model_run_SM = PolicyEmergenceSM(10,10)
+# 1 - policy emergence alone
+# 2 - segregation alone
+# 3 - both
+run_type = 1
 
-for i in range(5):
-	model_run_SM.step()
+if run_type == 1 or run_type == 3:
+	# running the policy emergence Simplest Model
+	model_run_SM = PolicyEmergenceSM(10,10)
 
-'''
-# running the Schelling model:
-model_run_schelling = Schelling(20, 20, 0.75, 0.4)
+	for i in range(5):
+		model_run_SM.step()
 
-for i in range(25):
-	if model_run_schelling.happy != model_run_schelling.schedule.get_agent_count():
-		print("Step: ", i)
-		model_run_schelling.step()
+if run_type == 2 or run_type == 3:
+	# running the Schelling model:
+	model_run_schelling = Schelling(20, 20, 0.75, 0.4)
 
-# for i in range(50):
-# 	model_run_schelling.step()
+	for i in range(25):
+		if model_run_schelling.happy != model_run_schelling.schedule.get_agent_count():
+			print("Step: ", i)
+			model_run_schelling.step()
+
+	# for i in range(50):
+	# 	model_run_schelling.step()
 
 
-# printing the data obtained from the Schelling model
-dataPlot = model_run_schelling.datacollector.get_model_vars_dataframe()
-print(dataPlot)
-dataPlot.plot("step", "evenness")
-dataPlot.plot("step", ["happy", "happytype0", "happytype1"])
-dataPlot.plot("step", ["movementtype0", "movementtype1"])
-plt.show()
-'''
+	# printing the data obtained from the Schelling model
+	dataPlot = model_run_schelling.datacollector.get_model_vars_dataframe()
+	print(dataPlot)
+	dataPlot.plot("step", "evenness")
+	dataPlot.plot("step", ["happy", "happytype0", "happytype1"])
+	dataPlot.plot("step", ["movement", "movementtype0", "movementtype1"])
+	plt.show()
