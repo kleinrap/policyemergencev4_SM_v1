@@ -3,7 +3,7 @@ import copy
 
 from model_SM_agents import ActiveAgent, ElectorateAgent, TruthAgent
 
-def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, len_ins_2):
+def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, len_ins_2, len_ins_all):
 
 	# agent global properties
 	number_activeagents = 10
@@ -35,16 +35,16 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# [PF1] = [PC1,...,PCn, Preference]
 	# [PI1.1] = [S1,...,Sn, Preference]
 	policytree0 = [None]
-	policytree0[0] = [[0] for f in range(len_PF + len_ins_1 + len_ins_2)]
+	policytree0[0] = [[0] for f in range(len_PF + len_ins_1 + len_ins_2 + len_ins_all)]
 	for n in range(len_PC):
 		policytree0[0][n] = [0 for f in range(len_PC)]
 	for m in range(len_ins_1+len_ins_2):
 		policytree0[0][len_PF+m] = [0 for f in range(len_S+1)]  # +1 is placed for the inclusion of preferences
 	for r in range(number_activeagents):
-		policytree_empty_agents = [[None] for f in range(len_PF + len_ins_1 + len_ins_2)]
+		policytree_empty_agents = [[None] for f in range(len_PF + len_ins_1 + len_ins_2 + len_ins_all)]
 		for n in range(len_PC):
 			policytree_empty_agents[n] = [None for f in range(len_PC)]
-		for m in range(len_ins_1+len_ins_2):
+		for m in range(len_ins_1+len_ins_2 + len_ins_all):
 			policytree_empty_agents[len_PF+m] = [None for f in range(len_S+1)]
 		policytree0.append(policytree_empty_agents)
 
@@ -444,7 +444,7 @@ def init_electorate_agents(self, len_S, len_PC, len_DC):
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
-def init_truth_agent(self, len_S, len_PC, len_DC, len_ins_1, len_ins_2):
+def init_truth_agent(self, len_S, len_PC, len_DC, len_ins_1, len_ins_2, len_ins_all):
 
 	# model issue tree structure
 	# the format for the whole issue tree is given as:
@@ -457,10 +457,10 @@ def init_truth_agent(self, len_S, len_PC, len_DC, len_ins_1, len_ins_2):
 	# [policytree] = [[PF1],...,[PFn],[PI1.1],...,[PI1.n],...,[PIn.1],...,[PIn.n]]
 	# [PF1] = [PC1,...,PCn]
 	# [PI1.1] = [S1,...,Sn]
-	policytree0 = [0 for f in range(len_PC+len_ins_1+len_ins_2)]
+	policytree0 = [0 for f in range(len_PC+len_ins_1+len_ins_2 + len_ins_all)]
 	for n in range(len_PC):
 		policytree0[n] = [0 for f in range(len_PC)]
-	for m in range(len_ins_1+len_ins_2):
+	for m in range(len_ins_1+len_ins_2 + len_ins_all):
 		policytree0[len_PC+m] = [0 for f in range(len_S)]
 
 	# creation of the agent

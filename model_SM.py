@@ -40,18 +40,18 @@ class PolicyEmergenceSM(Model):
 		# print(self.len_S, self.len_PC, self.len_DC, self.len_CR)
 
 		# issue tree properties
-		self.policy_instruments, self.len_ins_1, self.len_ins_2 = policy_instrument_input(self, self.len_PC)
+		self.policy_instruments, self.len_ins_1, self.len_ins_2, self.len_ins_all = policy_instrument_input(self, self.len_PC)
 
 		
 
 		# Set up active agents (manually for now)
-		init_active_agents(self, self.len_S, self.len_PC, self.len_DC, self.len_CR, self.len_PC, self.len_ins_1, self.len_ins_2)
+		init_active_agents(self, self.len_S, self.len_PC, self.len_DC, self.len_CR, self.len_PC, self.len_ins_1, self.len_ins_2, self.len_ins_all)
 
 		# Set up passive agents (manually for now)
 		init_electorate_agents(self, self.len_S, self.len_PC, self.len_DC)
 
 		# Set up truth agent
-		init_truth_agent(self, self.len_S, self.len_PC, self.len_DC, self.len_ins_1, self.len_ins_2)
+		init_truth_agent(self, self.len_S, self.len_PC, self.len_DC, self.len_ins_1, self.len_ins_2, self.len_ins_all)
 		# the issue tree will need to be updated at a later stage witht he values from the system/policy context
 
 		print("Schedule has : ", len(self.schedule.agents), " agents.")
@@ -99,7 +99,8 @@ class PolicyEmergenceSM(Model):
 
 		# 3.
 		self.module_interface_output()
-
+		print("Policy instrument selection not implemented yet!")
+		policy_instrument_chosen = [None, None, None, None, None]
 
 		# end of step actions:
 		# iterate the steps counter
@@ -107,6 +108,8 @@ class PolicyEmergenceSM(Model):
 
 		# collect data
 		self.datacollector.collect(self)
+
+		return policy_instrument_chosen
 
 	def module_interface_input(self):
 
