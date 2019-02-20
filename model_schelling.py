@@ -60,10 +60,11 @@ class SchellingAgent(Agent):
     def step(self):
 
         # Checking if the agent is happy
-        happyBool = self.happy_check()
+        happyBool = self.happy_check()            
 
         # Increment last move parameter
         self.last_move += 1
+
 
         # If unhappy, move - considering the movement quota and whether the agent is type0 or type1:
         movementQuotaCheck = self.model.movementQuota*self.model.schedule.get_agent_count()
@@ -73,8 +74,13 @@ class SchellingAgent(Agent):
                 if self.last_move > self.model.last_move_quota: 
                     self.model.grid.move_to_empty(self)
                     self.model.movementQuotaCount += 1
+                    if self.type == 0:
+                        self.model.movementtype0 += 1
+                    if self.type == 1:
+                        self.model.movementtype1 += 1
                     # Update happiness status after move
                     self.happy_check()
+
                     # reset the movement parameter for the agent
                     self.last_move = 0
 
@@ -102,6 +108,10 @@ class SchellingAgent(Agent):
         if (self.type == 0 and similar > self.model.homophilyType0) or (self.type == 1 and similar > self.model.homophilyType1):
             happyBool = True
             self.model.happy += 1
+            if self.type == 0:
+                self.model.happytype0 += 1
+            if self.type == 1:
+                self.model.happytype1 += 1
 
         return happyBool
 
@@ -131,16 +141,20 @@ class Schelling(Model):
         self.grid = SingleGrid(height, width, torus=True)
 
         self.happy = 0
+        self.happytype0 = 0
+        self.happytype1 = 0
         self.stepCount = 0
         self.evenness = 0
         self.empty = 0
         self.type0agents = 0
         self.type1agents = 0
+        self.movementtype0 = 0
+        self.movementtype1 = 0
         self.movementQuotaCount = 0
         self.numberOfAgents = 0
         self.datacollector = DataCollector(
             # Model-level count of happy agents
-            {"step": "stepCount", "happy": "happy", "evenness": "evenness", "numberOfAgents": "numberOfAgents"},
+            {"step": "stepCount", "happy": "happy", "happytype0": "happytype0", "happytype1": "happytype1", "movementtype0": "movementtype0", "movementtype1": "movementtype1","evenness": "evenness", "numberOfAgents": "numberOfAgents"},
             # For testing purposes, agent's individual x and y
             {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]})
 
@@ -175,10 +189,15 @@ class Schelling(Model):
             It cannot be performed in the step function of the agents as then it would not take consider periods of time during which the agents are still moving, making the parameter calculation inaccurate. 
         '''
         self.happy = 0  # Reset counter of happy agents
+        self.happytype0 = 0  # Reset counter of happy type 0 agents
+        self.happytype1 = 0  # Reset counter of happy type 1 agents
         self.empty = 0  # Reset counter of empty cells
         self.type0agents = 0  # Reset count of type 0 agents
         self.type1agents = 0  # Reset count of type 1 agents
         self.movementQuotaCount = 0  # Reset count of the movement quota
+        self.movementtype0 = 0  # Reset counter of movement of type 0 agents
+        self.movementtype1 = 0  # Reset counter of movement of type 1 agents
+
 
         # run the step for the agents
         self.schedule.step()
