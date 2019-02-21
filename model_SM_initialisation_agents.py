@@ -48,10 +48,6 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 			policytree_empty_agents[len_PF+m] = [None for f in range(len_S+1)]
 		policytree0.append(policytree_empty_agents)
 
-	print("**********************************************")
-	print("ADJUST THE BELIEFS AND GOALS TO THE NEW ISSUES")
-	print("**********************************************")
-
 	# creation of the agents
 	# policy maker 1
 	x = 0
@@ -65,12 +61,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	len_PC_names = ["movement", "happiness"]
 	len_S_names = ["movement0", "movement1", "happy0", "happy1"]
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [0.0, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [-0.5, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.1, 0.3, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [0.2, -0.3, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][5] = [-0.3, 0.9, 0] # S3 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [-0.3, 0.9, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -85,7 +81,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -99,12 +95,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	issuetree = copy.deepcopy(issuetree0)
 	# issue beliefs, goals and preferences
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [0.0, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [-0.5, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.1, 0.3, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [0.2, -0.3, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][5] = [-0.3, 0.9, 0] # S3 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [-0.3, 0.9, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -119,7 +115,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -135,12 +131,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	len_PC_names = ["movement", "happiness"]
 	len_S_names = ["movement0", "movement1", "happy0", "happy1"]
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [-0.7, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [0, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.2, 0, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [-0.1, 0, 0] # S2 - Belief, Goal, Preference
 	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [0.0, 0.65, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -155,7 +151,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -169,12 +165,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	issuetree = copy.deepcopy(issuetree0)
 	# issue beliefs, goals and preferences
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [0.0, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [-0.5, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.1, 0.3, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [0.2, -0.3, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][5] = [-0.3, 0.9, 0] # S3 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [-0.3, 0.9, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -189,7 +185,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -203,12 +199,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	issuetree = copy.deepcopy(issuetree0)
 	# issue beliefs, goals and preferences
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [0.0, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [-0.5, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.1, 0.3, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [0.2, -0.3, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][5] = [-0.3, 0.9, 0] # S3 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [-0.3, 0.9, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -223,7 +219,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -237,12 +233,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	issuetree = copy.deepcopy(issuetree0)
 	# issue beliefs, goals and preferences
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [-0.7, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [0, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.2, 0, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [-0.1, 0, 0] # S2 - Belief, Goal, Preference
 	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [0.0, 0.65, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -257,7 +253,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -271,12 +267,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	issuetree = copy.deepcopy(issuetree0)
 	# issue beliefs, goals and preferences
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [-0.7, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [0, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.2, 0, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [-0.1, 0, 0] # S2 - Belief, Goal, Preference
 	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [0.0, 0.65, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -291,7 +287,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -305,12 +301,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	issuetree = copy.deepcopy(issuetree0)
 	# issue beliefs, goals and preferences
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [-0.7, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [0, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.2, 0, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [-0.1, 0, 0] # S2 - Belief, Goal, Preference
 	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [0.0, 0.65, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -325,7 +321,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -339,12 +335,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	issuetree = copy.deepcopy(issuetree0)
 	# issue beliefs, goals and preferences
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [0.0, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [-0.5, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.1, 0.3, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [0.2, -0.3, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][5] = [-0.3, 0.9, 0] # S3 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [-0.3, 0.9, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -359,7 +355,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -373,12 +369,12 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	issuetree = copy.deepcopy(issuetree0)
 	# issue beliefs, goals and preferences
 	issuetree[unique_id][0] = [0.7, -0.9, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.0, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.8, 1.0, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [-0.4, 0.75, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.0, 0.9, 0] # S2 - Belief, Goal, Preference
+	issuetree[unique_id][1] = [-0.7, 0.2, 0] # PC1 - Belief, Goal, Preference
+	issuetree[unique_id][2] = [0, 0.9, 0] # PC2 - Belief, Goal, Preference
+	issuetree[unique_id][3] = [0.2, 0, 0] # S1 - Belief, Goal, Preference
+	issuetree[unique_id][4] = [-0.1, 0, 0] # S2 - Belief, Goal, Preference
 	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, -0.7, 0] # S4 - Belief, Goal, Preference
+	issuetree[unique_id][6] = [0.0, 0.65, 0] # S4 - Belief, Goal, Preference
 	# causal relations
 	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
 	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
@@ -393,7 +389,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# policy tree copy
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_udapte(agent, unique_id)  # updating the issue tree preferences
+	self.preference_update(agent, unique_id)  # updating the issue tree preferences
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 
@@ -415,12 +411,12 @@ def init_electorate_agents(self, len_S, len_PC, len_DC):
 	issuetree = copy.deepcopy(issuetree0)
 	# issue goals
 	issuetree[0] = -0.9 # DC1 - Belief, Goal, Preference
-	issuetree[1] = 0.8 # PC1 - Belief, Goal, Preference
-	issuetree[2] = 1.0 # PC2 - Belief, Goal, Preference
-	issuetree[3] = 0.75 # S1 - Belief, Goal, Preference
-	issuetree[4] = 0.9 # S2 - Belief, Goal, Preference
-	issuetree[5] = 0.95 # S3 - Belief, Goal, Preference
-	issuetree[6] = -0.7 # S4 - Belief, Goal, Preference
+	issuetree[1] = 0.2 # PC1 - Belief, Goal, Preference
+	issuetree[2] = 0.9 # PC2 - Belief, Goal, Preference
+	issuetree[3] = 0.3 # S1 - Belief, Goal, Preference
+	issuetree[4] = 0.3 # S2 - Belief, Goal, Preference
+	issuetree[5] = 1 # S3 - Belief, Goal, Preference
+	issuetree[6] = 1 # S4 - Belief, Goal, Preference
 	agent = ElectorateAgent((x, y), unique_id, self, affiliation, issuetree, representativeness)
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
@@ -433,13 +429,13 @@ def init_electorate_agents(self, len_S, len_PC, len_DC):
 	representativeness = 26
 	issuetree = copy.deepcopy(issuetree0)
 	# issue goals
-	issuetree[0] = 0.0 # DC1 - Belief, Goal, Preference
-	issuetree[1] = 0.5 # PC1 - Belief, Goal, Preference
-	issuetree[2] = -0.5 # PC2 - Belief, Goal, Preference
-	issuetree[3] = 0.5 # S1 - Belief, Goal, Preference
-	issuetree[4] = 0.0 # S2 - Belief, Goal, Preference
-	issuetree[5] = -0.1 # S3 - Belief, Goal, Preference
-	issuetree[6] = 0.2 # S4 - Belief, Goal, Preference
+	issuetree[0] = -0.9 # DC1 - Belief, Goal, Preference
+	issuetree[1] = 0.2 # PC1 - Belief, Goal, Preference
+	issuetree[2] = 0.9 # PC2 - Belief, Goal, Preference
+	issuetree[3] = 0 # S1 - Belief, Goal, Preference
+	issuetree[4] = 0 # S2 - Belief, Goal, Preference
+	issuetree[5] = 0.9 # S3 - Belief, Goal, Preference
+	issuetree[6] = 0 # S4 - Belief, Goal, Preference
 	agent = ElectorateAgent((x, y), unique_id, self, affiliation, issuetree, representativeness)
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)

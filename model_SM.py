@@ -42,8 +42,6 @@ class PolicyEmergenceSM(Model):
 		# issue tree properties
 		self.policy_instruments, self.len_ins_1, self.len_ins_2, self.len_ins_all = policy_instrument_input(self, self.len_PC)
 
-		
-
 		# Set up active agents (manually for now)
 		init_active_agents(self, self.len_S, self.len_PC, self.len_DC, self.len_CR, self.len_PC, self.len_ins_1, self.len_ins_2, self.len_ins_all)
 
@@ -54,20 +52,20 @@ class PolicyEmergenceSM(Model):
 		init_truth_agent(self, self.len_S, self.len_PC, self.len_DC, self.len_ins_1, self.len_ins_2, self.len_ins_all)
 		# the issue tree will need to be updated at a later stage witht he values from the system/policy context
 
-		print("Schedule has : ", len(self.schedule.agents), " agents.")
-		print(self.schedule.agents)
-		print(" ")
+		# print("Schedule has : ", len(self.schedule.agents), " agents.")
+		# print(self.schedule.agents)
+		# print(" ")
 
-		for agent in self.schedule.agent_buffer(shuffled=False):
-			print(' ')
-			print(agent)
-			print(type(agent))
-			# if isinstance(agent, ActiveAgent):
-			# 	print(agent.unique_id, " ", agent.pos, " ", agent.agent_type, " ", agent.resources, " ", agent.affiliation, " ", agent.issuetree[agent.unique_id], " ", agent.policytree[agent.unique_id][0])
-			# if isinstance(agent, ElectorateAgent):
-			# 	print(agent.unique_id, " ", agent.pos, " ", agent.affiliation, " ", agent.issuetree)
-			# if isinstance(agent, TruthAgent):
-			# 	print(agent.pos, " ", agent.issuetree)
+		# for agent in self.schedule.agent_buffer(shuffled=False):
+		# 	print(' ')
+		# 	print(agent)
+		# 	print(type(agent))
+		# 	if isinstance(agent, ActiveAgent):
+		# 		print(agent.unique_id, " ", agent.pos, " ", agent.agent_type, " ", agent.resources, " ", agent.affiliation, " ", agent.issuetree[agent.unique_id], " ", agent.policytree[agent.unique_id][0])
+		# 	if isinstance(agent, ElectorateAgent):
+		# 		print(agent.unique_id, " ", agent.pos, " ", agent.affiliation, " ", agent.issuetree)
+		# 	if isinstance(agent, TruthAgent):
+		# 		print(agent.pos, " ", agent.issuetree)
 
 		self.running = True
 		self.numberOfAgents = self.schedule.get_agent_count()
@@ -90,6 +88,11 @@ class PolicyEmergenceSM(Model):
 
 		# 0.
 		self.module_interface_input()
+
+		'''
+		TO DO:
+		- Introduce the transfer of information between the external parties and the truth agent relates to the policy impacts
+		'''
 
 		# 1.
 		self.agenda_setting()
@@ -118,6 +121,16 @@ class PolicyEmergenceSM(Model):
 		'''
 
 		print("Module interface output not introduced yet")
+
+		# selection of the Truth agent policy tree
+		for agent in self.schedule.agent_buffer(shuffled=True):
+			if isinstance(agent, TruthAgent):
+				truth_tree = agent.policytree
+
+		# Transferring policy impact to active agents
+		for agent in self.schedule.agent_buffer(shuffled=True):
+			if isinstance(agent, ActiveAgent):
+				agent.policytree[0] = truth_tree
 
 	def agenda_setting(self):
 
@@ -161,8 +174,6 @@ class PolicyEmergenceSM(Model):
 
 		self.agenda_PF = None
 
-
-
 	def policy_formulation(self):
 
 		'''
@@ -181,8 +192,7 @@ class PolicyEmergenceSM(Model):
 
 		print("Module interface output not introduced yet")
 
-
-	def preference_udapte(self, agent, who):
+	def preference_update(self, agent, who):
 
 		"""
 		The preference update function
@@ -293,7 +303,7 @@ class PolicyEmergenceSM(Model):
 
 			# 1.5.2.3.3. Calculation of the preference
 			if ML_denominator != 0:
-				agent.issuetree[who][len_DC+j][2] = ML_numerator/ML_denominator 
+				agent.issuetree[who][len_DC+j][2] = round(ML_numerator/ML_denominator,3) 
 			# print('The new preference of the policy core ML' + str(j+1) + ' is: ' + str(agent.issuetree[0][len_DC+j][2]))
 			else:
 				agent.issuetree[who][len_DC+j][2] = 0

@@ -17,9 +17,11 @@ TO DO file for the policy emergence model
 2. Agenda setting step without actions
 	- Agent-specific selection of issues (PC) (done)
 	- Initialise the policy instruments (done)
-	- Calculate impact of policy instruments
-	- Calculate impact of policy families 
+	- Calculate impact of policy instruments (done)
+	- Calculate impact of policy families (done)
 	- Agent-specific selection of policies (PF)
+	- Transfer of beliefs to agents through the truth agent
+	- Complete the input part of the model
 	- Creation of the agenda
 
 3. Policy formulation step without actions
@@ -27,6 +29,7 @@ TO DO file for the policy emergence model
 	- Calculate impact of policy instruments
 	- Agent-specific selection of policies (PI)
 	- Selection of the policy to be implemented 
+	- Complete the output part of the model
 
 4. Policy network introduction
 
@@ -35,6 +38,7 @@ TO DO file for the policy emergence model
 6. Construction of the module interface
 	- Define how to initialise the beliefs of the agents (from the model or based on surveys)
 	- Define how instruments should be implemented into the system/policy context
+
 7. First full SM model runs
 	
 	- 
