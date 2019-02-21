@@ -101,17 +101,11 @@ if run_type == 3:
 				if Sinit[q] == issues[q][j]:
 					impact_policy[q] = 0
 
-			print("policy_instruments: ", [j], " impact: ", impact_policy)
-
 			# selecting the agents of the main simulation
 			# updating the policy tree of the truth agent
 			for agent in model_run_SM.schedule.agent_buffer(shuffled=True):
 				if isinstance(agent, TruthAgent):
-					agent.policytree[model_run_SM.len_PC + j] = impact_policy	
-					print("Truth agent policy tree: ", agent.policytree)
-
-					# - NO IMPLEMENTATION AT THIS POINT? NOTHING CHANGES IN THE IMPACTS
-
+					agent.policytree[model_run_SM.len_PC + j] = impact_policy
 
 			'''
 			TO DO to complete the impact of policies:
