@@ -201,31 +201,22 @@ class Schelling(Model):
         self.movementtype0 = 0  # Reset counter of movement of type 0 agents
         self.movementtype1 = 0  # Reset counter of movement of type 1 agents
 
-
-        WARNING
-            - RIGHT NOW THE POLICY IS IMPLEMENTED FOR EVERY STEP - THIS NEEDS TO BE DONE ONLY AT THE END OF A ROUND.
-            - CHECK HAVE NOT BEEN PERFORMED ON WHETHER WHAT HAS BEEN IMPLEMENTED BELOW IS CORRECT - NO VERIFICATION WAS PERFORMED
-
         # introduction of the selected policy in the Schelling model
         # happy check vision changes
         if policy[0] != None and self.happyCheckRadius<15 and self.happyCheckRadius>1:
             self.happyCheckRadius += policy[0]
         # movement quota changes
-        if policy[1] != None and self.movementQuotaCount<100 and self.movementQuotaCount>5:
-            self.movementQuotaCount += policy[1]
+        if policy[1] != None and self.movementQuota<1 and self.movementQuota>0.05:
+            self.movementQuota += policy[1]
         # last movement threshold
         if policy[2] != None and self.last_move_quota<50 and self.last_move_quota>0:
             self.last_move_quota += policy[2]
         # type 0 preference
-        if policy[3] != None and self.homophilyType0<100 and self.homophilyType0>0:
+        if policy[3] != None and self.homophilyType0<1 and self.homophilyType0>0:
             self.homophilyType0 += policy[3]
         # type 1 preference
-        if policy[4] != None and self.homophilyType1<100 and self.homophilyType1>0:
+        if policy[4] != None and self.homophilyType1<1 and self.homophilyType1>0:
             self.homophilyType1 += policy[4]
-        # reset the policy once it has been implemented
-        policy = [None, None, None, None, None]
-
-
 
         # run the step for the agents
         self.schedule.step()

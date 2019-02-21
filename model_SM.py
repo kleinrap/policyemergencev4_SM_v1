@@ -100,7 +100,7 @@ class PolicyEmergenceSM(Model):
 		# 3.
 		self.module_interface_output()
 		print("Policy instrument selection not implemented yet!")
-		policy_instrument_chosen = [None, None, None, None, None]
+		policy_chosen = [None, None, None, None, None]
 
 		# end of step actions:
 		# iterate the steps counter
@@ -109,7 +109,7 @@ class PolicyEmergenceSM(Model):
 		# collect data
 		self.datacollector.collect(self)
 
-		return policy_instrument_chosen
+		return policy_chosen
 
 	def module_interface_input(self):
 
