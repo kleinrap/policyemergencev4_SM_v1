@@ -91,20 +91,17 @@ if run_type == 3:
 				# if there is a increase in value
 				if Sinit[q] < issues[q][j]:
 					impact_policy[q] = round(1 - (Sinit[q]/issues[q][j]), 3)
-
 				# if there is a decrease in value
 				if Sinit[q] > issues[q][j]:
-
 					impact_policy[q] = round((issues[q][j]/Sinit[q]) - 1, 3)
-
 				# if there is no increase or decrease
 				if Sinit[q] == issues[q][j]:
 					impact_policy[q] = 0
 
 			# selecting the agents of the main simulation
-			# updating the policy tree of the truth agent
 			for agent in model_run_SM.schedule.agent_buffer(shuffled=True):
 				if isinstance(agent, TruthAgent):
+					# updating the policy tree of the truth agent
 					agent.policytree[model_run_SM.len_PC + j] = impact_policy
 
 			'''
