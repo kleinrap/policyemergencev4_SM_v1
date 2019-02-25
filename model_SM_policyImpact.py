@@ -39,45 +39,43 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 
 	# looking at one policy instrument after the other
 	impact_policy = [[0 for l in range(model_run_SM.len_S+model_run_SM.len_PC)] for r in range(len(model_run_SM.policy_instruments))]
+	print("S1, S2, S3, S4")
 	for j in range(len(model_run_SM.policy_instruments)):
 
 		# calculating the percentage change from no policy to a policy
-		
 		for q in range(model_run_SM.len_S+model_run_SM.len_PC):
-			# if there is a increase in value
-			if IssueInit[q] < issues[q][j]:
-				impact_policy[j][q] = round(1 - (IssueInit[q]/issues[q][j]), 3)
-			# if there is a decrease in value
-			if IssueInit[q] > issues[q][j]:
-				impact_policy[j][q] = round((issues[q][j]/IssueInit[q]) - 1, 3)
-			# if there is no increase or decrease
-			if IssueInit[q] == issues[q][j]:
-				impact_policy[j][q] = 0
+			if issues[q][j] != 0:
+				impact_policy[j][q] = round((IssueInit[q] - issues[q][j])/issues[q][j], 3)
+			else:
+				impact_policy[j][q] = 1
 
 		# selecting the agents of the main simulation
 		for agent in model_run_SM.schedule.agent_buffer(shuffled=True):
 			if isinstance(agent, TruthAgent):
 				# updating the policy tree of the truth agent
 				agent.policytree[model_run_SM.len_PC + j] = impact_policy[j][0:model_run_SM.len_S]
+				print("Policy instrument: ", j, " - \n", agent.policytree[model_run_SM.len_PC + j])
 
 	# considering the policy families
 	# policy family 1 (instruments: 0, 1, 2, 3, 8, 9, 10)
 	# policy family 2 (instruments: 4, 5, 6, 7, 8, 9, 10)
 	likelihood_PF1 = [0 for f in range(model_run_SM.len_PC)]
-	len_PF1 = 6
+	len_PF1 = 7
 	likelihood_PF2 = [0 for f in range(model_run_SM.len_PC)]
-	len_PF2 = 6
+	len_PF2 = 7
+	print("--------------------")	
 	# average the absolute value of their impact per 
 	for j in range(len(model_run_SM.policy_instruments)):
 		# selecting only policy instruments related to policy family 1
 		if j == 0 or j == 1 or j == 2 or j == 3 or j == 8 or j == 9 or j == 10:
-			likelihood_PF1[0] += abs(impact_policy[j][model_run_SM.len_S]) / len_PF1
-			likelihood_PF1[1] += abs(impact_policy[j][model_run_SM.len_S+1]) / len_PF1
+			likelihood_PF1[0] += impact_policy[j][model_run_SM.len_S] / len_PF1
+			likelihood_PF1[1] += impact_policy[j][model_run_SM.len_S+1] / len_PF1
 		# selecting only policy instruments related to policy family 2
 		if j == 4 or j == 5 or j == 6 or j == 7 or j == 8 or j == 9 or j == 10:
-			likelihood_PF2[0] += abs(impact_policy[j][model_run_SM.len_S]) / len_PF2
-			likelihood_PF2[1] += abs(impact_policy[j][model_run_SM.len_S+1]) / len_PF2
+			likelihood_PF2[0] += impact_policy[j][model_run_SM.len_S] / len_PF2
+			likelihood_PF2[1] += impact_policy[j][model_run_SM.len_S+1] / len_PF2
 
+	# rounding values
 	likelihood_PF1[0] = round(likelihood_PF1[0], 3)
 	likelihood_PF1[1] = round(likelihood_PF1[1], 3)
 	likelihood_PF2[0] = round(likelihood_PF2[0], 3)
@@ -88,6 +86,7 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 			# updating the policy tree of the truth agent
 			agent.policytree[0] = likelihood_PF1
 			agent.policytree[1] = likelihood_PF2
+			print(agent.policytree[0], agent.policytree[1])
 
 
 

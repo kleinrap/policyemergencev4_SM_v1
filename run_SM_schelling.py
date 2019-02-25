@@ -50,15 +50,15 @@ if run_type == 3:
 	print("Start of the simulation:", "\n")
 	for i in range(run_tick):
 
-		# # warm up time
-		# # this is also used as a warmup time
-		# if i == 0:
-		# 	policy_chosen = [None for ite in range(len(model_run_SM.policy_instruments[0]))]
-		# 	for warmup_time in range(warmup_tick):
-		# 		IssueInit, type0agents, type1agents = model_run_schelling.step(policy_chosen)
+		# warm up time
+		# this is also used as a warmup time
+		if i == 0:
+			policy_chosen = [None for ite in range(len(model_run_SM.policy_instruments[0]))]
+			for warmup_time in range(warmup_tick):
+				IssueInit, type0agents, type1agents = model_run_schelling.step(policy_chosen)
 
-		# # policy impact evaluation
-		# policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, interval_tick)
+		# policy impact evaluation
+		policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, interval_tick)
 
 		# running the policy emergence model
 		policy_chosen = model_run_SM.step()

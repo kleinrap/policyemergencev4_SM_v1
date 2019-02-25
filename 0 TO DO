@@ -19,8 +19,8 @@ TO DO file for the policy emergence model
 	- Initialise the policy instruments (done)
 	- Calculate impact of policy instruments (done)
 	- Calculate impact of policy families (done)
-	- Agent-specific selection of policies (PF)
-	- Transfer of beliefs to agents through the truth agent
+	- Agent-specific selection of policies (PF) 
+	- Transfer of beliefs to agents through the truth agent (done)
 	- Complete the input part of the model
 	- Creation of the agenda
 
