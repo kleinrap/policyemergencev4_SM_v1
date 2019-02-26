@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import copy
 
 from model_SM_policyImpact import policy_impact_evaluation
-from model_module_interface import issue_mapping_zeroOne
+from model_module_interface import issue_mapping
 from model_SM_agents import TruthAgent
 
 '''
@@ -61,11 +61,15 @@ if run_type == 3:
 		policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, interval_tick)
 
 		# running the policy emergence model
-		policy_chosen = model_run_SM.step()
+		if i == 0:
+			KPIs = issue_mapping(IssueInit, type0agents, type1agents)
+		else:
+			KPIs = issue_mapping(KPIs, type0agents, type1agents)
+		policy_chosen = model_run_SM.step(KPIs)
 
 		# run of the segregation model for n ticks
 		for p in range(interval_tick):
-			IssueInit, type0agents, type1agents = model_run_schelling.step(policy_chosen)
+			KPIs, type0agents, type1agents = model_run_schelling.step(policy_chosen)
 			policy_chosen = [None for ite in range(len(model_run_SM.policy_instruments[0]))] # reset policy after it has been implemented once
 
 

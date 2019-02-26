@@ -14,6 +14,9 @@ TO DO file for the policy emergence model
 	- Introduction of the electorate (done)
 	- Introduction of the truth agent (done)
 
+X. Change from -1,1 to 0,1 intervals for beliefs and goals
+	- Change the input file (done)
+
 2. Agenda setting step without actions
 	- Agent-specific selection of issues (PC) (done)
 	- Initialise the policy instruments (done)
@@ -21,6 +24,7 @@ TO DO file for the policy emergence model
 	- Calculate impact of policy families (done)
 	- Agent-specific selection of policies (PF) 
 	- Transfer of beliefs to agents through the truth agent (done)
+	- Transfer of the issuetree to agents through the truth agent - full knowledge (done)
 	- Complete the input part of the model
 	- Creation of the agenda
 

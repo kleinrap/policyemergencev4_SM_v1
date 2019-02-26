@@ -1,4 +1,4 @@
-from model_module_interface import issue_mapping_zeroOne
+from model_module_interface import issue_mapping
 from model_SM_agents import TruthAgent
 import copy
 
@@ -27,7 +27,7 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 			policy = [None for f in range(len(model_run_SM.policy_instruments[j]))]  # reset policy vector after it has been implemented once
 
 		# mapping the outcomes to a [0,1] interval
-		IssueE = issue_mapping_zeroOne(IssueE, type0agents, type1agents)
+		IssueE = issue_mapping(IssueE, type0agents, type1agents)
 
 		# store the final state of the belief (last simulation)
 		for p in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
@@ -35,7 +35,7 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 
 	# change the policy tree accordingly
 	# transforming initial KPIs to [0,1] interval
-	IssueInit = issue_mapping_zeroOne(IssueInit, type0agents, type1agents)
+	IssueInit = issue_mapping(IssueInit, type0agents, type1agents)
 
 	# looking at one policy instrument after the other
 	impact_policy = [[0 for l in range(model_run_SM.len_S+model_run_SM.len_PC)] for r in range(len(model_run_SM.policy_instruments))]
@@ -43,10 +43,12 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 	for j in range(len(model_run_SM.policy_instruments)):
 
 		# calculating the percentage change from no policy to a policy
-		for q in range(model_run_SM.len_S+model_run_SM.len_PC):
+		for q in range(model_run_SM.len_PC+model_run_SM.len_S):
 			if issues[q][j] != 0:
-				impact_policy[j][q] = round((IssueInit[q] - issues[q][j])/issues[q][j], 3)
-			else:
+				impact_policy[j][q] = round((IssueInit[model_run_SM.len_DC+q] - issues[q][j])/issues[q][j], 3)
+			if issues[q][j] == 0 and IssueInit[model_run_SM.len_DC+q] == 0:
+				impact_policy[j][q] = 0
+			if issues[q][j] == 0 and IssueInit[model_run_SM.len_DC+q] != 0:
 				impact_policy[j][q] = 1
 
 		# selecting the agents of the main simulation
@@ -63,7 +65,6 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 	len_PF1 = 7
 	likelihood_PF2 = [0 for f in range(model_run_SM.len_PC)]
 	len_PF2 = 7
-	print("--------------------")	
 	# average the absolute value of their impact per 
 	for j in range(len(model_run_SM.policy_instruments)):
 		# selecting only policy instruments related to policy family 1
@@ -86,7 +87,6 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 			# updating the policy tree of the truth agent
 			agent.policytree[0] = likelihood_PF1
 			agent.policytree[1] = likelihood_PF2
-			print(agent.policytree[0], agent.policytree[1])
 
 
 

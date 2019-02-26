@@ -71,7 +71,7 @@ class PolicyEmergenceSM(Model):
 		self.numberOfAgents = self.schedule.get_agent_count()
 		self.datacollector.collect(self)
 
-	def step(self):
+	def step(self, KPIs):
 		print(" ")
 		print("step me")
 
@@ -86,8 +86,11 @@ class PolicyEmergenceSM(Model):
 			Implementation of the policy instrument selected
 		'''
 
+		# saving the attributes
+		self.KPIs = KPIs
+
 		# 0.
-		self.module_interface_input()
+		self.module_interface_input(self.KPIs)
 
 		'''
 		TO DO:
@@ -114,23 +117,37 @@ class PolicyEmergenceSM(Model):
 
 		return policy_chosen
 
-	def module_interface_input(self):
+	def module_interface_input(self, KPIs):
 
 		'''
 		The module interface input step consists of actions related to the module interface and 
 		'''
 
-		print("Module interface output not introduced yet")
+		print("Module interface output not fully introduced yet")
 
-		# selection of the Truth agent policy tree
+		# selection of the Truth agent policy tree and issue tree
 		for agent in self.schedule.agent_buffer(shuffled=True):
 			if isinstance(agent, TruthAgent):
-				truth_tree = agent.policytree
+				truth_policytree = agent.policytree
+				for issue in range(self.len_DC+self.len_PC+self.len_S):
+					agent.issuetree[issue] = KPIs[issue]
+				truth_issuetree = agent.issuetree
 
 		# Transferring policy impact to active agents
 		for agent in self.schedule.agent_buffer(shuffled=True):
 			if isinstance(agent, ActiveAgent):
-				agent.policytree[0] = truth_tree
+				# replacing the policy family likelihoods
+				for PFj in range(self.len_PC):
+					agent.policytree[agent.unique_id][PFj][0:self.len_PC] = truth_policytree[PFj][0:self.len_PC]
+
+				# replacing the policy instruments impacts
+				for insj in range(self.len_ins_1 + self.len_ins_2 + self.len_ins_all):
+					agent.policytree[agent.unique_id][self.len_PC+insj][0:self.len_S] = truth_policytree[insj]
+
+				# replacing the issue beliefs from the KPIs
+				for issue in range(self.len_DC+self.len_PC+self.len_S):
+					agent.issuetree[agent.unique_id][issue][0] = truth_issuetree[issue]
+				self.preference_update(agent, agent.unique_id)
 
 	def agenda_setting(self):
 

@@ -246,7 +246,7 @@ class Schelling(Model):
             self.running = False
             print("All agents are happy, the simulation ends!")
 
-        output_KPIs = [self.movementtype0, self.movementtype1, self.happytype0, self.happytype1, self.movement, self.happy, self.evenness]
+        output_KPIs = [self.evenness, self.movement, self.happy, self.movementtype0, self.movementtype1, self.happytype0, self.happytype1]
         return output_KPIs, self.type0agents, self.type1agents
 
     def evenness_calculation(self):
