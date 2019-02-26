@@ -22,11 +22,14 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals
 	- Initialise the policy instruments (done)
 	- Calculate impact of policy instruments (done)
 	- Calculate impact of policy families (done)
-	- Agent-specific selection of policies (PF) 
+	- Agent-specific selection of policy families (PF) (done) 
 	- Transfer of beliefs to agents through the truth agent (done)
 	- Transfer of the issuetree to agents through the truth agent - full knowledge (done)
 	- Complete the input part of the model
 	- Creation of the agenda
+
+
+	DO NOT FORGET TO RESET CHOICES OF PF AND PC AND F AND ins AT THE BEGINNING OF EACH STEP FOR THE AGENTS
 
 3. Policy formulation step without actions
 	- Agent-specific selection of issues (S)
