@@ -311,14 +311,13 @@ class PolicyEmergenceSM(Model):
 		PC_denominator = 0
 		# 1.5.2.1. Calculation of the denominator
 		for j in range(len_PC):
-			PC_denominator = 0
 			# print('Selection PC' + str(j+1))
 			# print('State of the PC' + str(j+1) + ': ' + str(agent.issuetree[0][len_DC + j][0])) # the state printed
 			# Selecting the causal relations starting from PC
 			for k in range(len_DC):
 				# Contingency for partial knowledge issues
 				if agent.issuetree[who][k][1] == None or agent.issuetree[who][k][0] == None or agent.issuetree[who][len_DC+len_PC+len_S+j+(k*len_PC)][0] == None:
-					PC_denominator = 0
+					PC_denominator += 0
 				else:
 					# print('Causal Relation PC' + str(j+1) + ' - PC' + str(k+1) + ': ' + str(agent.issuetree[0][len_DC+len_PC+len_S+j+(k*len_PC)][1]))
 					# print('Gap of PC' + str(k+1) + ': ' + str((agent.issuetree[0][k][1] - agent.issuetree[0][k][0])))
@@ -337,7 +336,7 @@ class PolicyEmergenceSM(Model):
 				PC_denominator = PC_denominator
 			else:
 				# print('This is the gap for the PC' + str(i+1) + ': ' + str(agent.issuetree[0][len_DC + i][1] - agent.issuetree[0][len_DC + i][0]))
-				PC_denominator = PC_denominator + abs(agent.issuetree[who][len_DC + i][1] - agent.issuetree[who][len_DC + i][0])
+				PC_denominator += abs(agent.issuetree[who][len_DC + i][1] - agent.issuetree[who][len_DC + i][0])
 		# print('This is the S denominator: ' + str(PC_denominator))
 		
 		# 1.5.2.3 Calculation the numerator and the preference
@@ -352,7 +351,7 @@ class PolicyEmergenceSM(Model):
 			for k in range(len_DC):
 				# Contingency for partial knowledge issues
 				if agent.issuetree[who][k][1] == None or agent.issuetree[who][k][0] == None or agent.issuetree[who][len_DC+len_PC+len_S+j+(k*len_PC)][0] == None:
-					PC_numerator = 0
+					PC_numerator += 0
 				else:
 					# print('Causal Relation PC' + str(j+1) + ' - DC' + str(k+1) + ': ' + str(agent.issuetree[0][len_DC+len_PC+len_S+j+(k*len_PC)][1]))
 					# print('Gap of DC' + str(k+1) + ': ' + str((agent.issuetree[0][k][1] - agent.issuetree[0][k][0])))
@@ -366,10 +365,10 @@ class PolicyEmergenceSM(Model):
 			# 1.5.2.3.2. Addition of the gap to the numerator
 			# Contingency for partial knowledge issues
 			if agent.issuetree[who][len_DC + j][1] == None or agent.issuetree[who][len_DC + j][0] == None:
-				PC_numerator = 0
+				PC_numerator += 0
 			else:
 				# print('This is the gap for the PC' + str(j+1) + ': ' + str(agent.issuetree[0][len_DC + j][1] - agent.issuetree[0][len_DC + j][0]))
-				PC_numerator = PC_numerator + abs(agent.issuetree[who][len_DC + j][1] - agent.issuetree[who][len_DC + j][0])
+				PC_numerator += abs(agent.issuetree[who][len_DC + j][1] - agent.issuetree[who][len_DC + j][0])
 			# print('The numerator is equal to: ' + str(PC_numerator))
 			# print('The denominator is equal to: ' + str(PC_denominator))
 
@@ -403,14 +402,13 @@ class PolicyEmergenceSM(Model):
 		S_denominator = 0
 		# 1.5.2.1. Calculation of the denominator
 		for j in range(len_S):
-			S_denominator = 0
 			# print('Selection S' + str(j+1))
 			# print('State of the S' + str(j+1) + ': ' + str(agent.issuetree[0][len_DC + len_PC + j][0])) # the state printed
 			# Selecting the causal relations starting from S
 			for k in range(len_PC):
 				# Contingency for partial knowledge issues
 				if agent.issuetree[who][len_DC + k][1] == None or agent.issuetree[who][len_DC + k][0] == None or agent.issuetree[who][len_DC+len_PC+len_S+len_DC*len_PC+j+(k*len_S)][0] == None:
-					S_denominator = 0
+					S_denominator += 0
 				else:
 					# print('Causal Relation S' + str(j+1) + ' - PC' + str(k+1) + ': ' + str(agent.issuetree[who][len_DC+len_PC+len_S+len_DC*len_PC+j+(k*len_S)][0]))
 					# print('Gap of PC' + str(k+1) + ': ' + str((agent.issuetree[who][len_DC+k][1] - agent.issuetree[who][len_DC+k][0])))
@@ -423,17 +421,14 @@ class PolicyEmergenceSM(Model):
 						S_denominator = S_denominator	
 
 		# 1.5.2.2. Addition of the gaps of the associated secondary issues
-		for i in range(len_S):
+		for j in range(len_S):
 			# Contingency for partial knowledge issues
-			if agent.issuetree[who][len_DC + len_PC + i][1] == None or agent.issuetree[who][len_DC + len_PC + i][0] == None:
+			if agent.issuetree[who][len_DC+len_PC+j][1] == None or agent.issuetree[who][len_DC+len_PC+j][0] == None:
 				S_denominator = S_denominator
 			else:
 				# print('This is the gap for the PC' + str(i+1) + ': ' + str(agent.issuetree[0][len_DC + len_PC + i][1] - agent.issuetree[0][len_DC + len_PC + i][0]))
-				S_denominator += abs(agent.issuetree[who][len_DC + len_PC + i][1] - agent.issuetree[who][len_DC + len_PC + i][0])
+				S_denominator += abs(agent.issuetree[who][len_DC+len_PC+j][1] - agent.issuetree[who][len_DC+len_PC+j][0])
 		# print('This is the PC denominator: ' + str(S_denominator))
-
-		print(' c')
-		print("S_denominator: ", S_denominator)
 		
 		# 1.5.2.3 Calculation the numerator and the preference
 		# Select one by one the S
@@ -449,7 +444,7 @@ class PolicyEmergenceSM(Model):
 				if agent.issuetree[who][len_DC + k][1] == None or agent.issuetree[who][len_DC + k][0] == None or agent.issuetree[who][len_DC+len_PC+len_S+len_DC*len_PC+j+(k*len_S)][0] == None:
 					S_numerator = 0
 				else:
-					# print('Causal Relation S' + str(j+1) + ' - PC' + str(k+1) + ': ' + str(agent.issuetree[0][len_DC+len_PC+len_S+len_DC*len_PC+j+(k*len_S)][0]))
+					# print('Causal Relation S' + str(j+1) + ' - PC' + str(k+1) + ': ' + str(agent.issuetree[who][len_DC+len_PC+len_S+len_DC*len_PC+j+(k*len_S)][0]))
 					# print('Gap of PC' + str(k+1) + ': ' + str((agent.issuetree[who][len_DC + k][1] - agent.issuetree[who][len_DC + k][0])))
 					# Check if causal relation and gap are both positive of both negative
 					if (agent.issuetree[who][len_DC+len_PC+len_S+len_DC*len_PC+j+(k*len_S)][0] < 0 and (agent.issuetree[who][len_DC+k][1] - agent.issuetree[who][len_DC+k][0]) < 0) or (agent.issuetree[who][len_DC+len_PC+len_S+len_DC*len_PC+j+(k*len_S)][0] > 0 and (agent.issuetree[who][len_DC+k][1] - agent.issuetree[who][len_DC+k][0]) > 0):
@@ -457,24 +452,23 @@ class PolicyEmergenceSM(Model):
 						# print('This is the PC numerator: ' + str(S_numerator))
 					else:
 						S_numerator = S_numerator
-			print("intermediate: ", S_numerator)
 
-			THE SUM OF THE NUMERATORS IS NOT EQUAL TO THE DENOMINATOR - IT IS LARGER
 			# 1.5.2.3.2. Addition of the gap to the numerator
 			# Contingency for partial knowledge issues
 			if agent.issuetree[who][len_DC+len_PC+j][1] == None or agent.issuetree[who][len_DC+len_PC+j][0] == None:
-				S_numerator = 0
+				S_numerator += 0
 			else:
-				# print('This is the gap for the PC' + str(j+1) + ': ' + str(agent.issuetree[0][len_DC + len_PC + j][1] - agent.issuetree[0][len_DC + len_PC + j][0]))
+				# print('This is the gap for the PC' + str(j+1) + ': ' + str(agent.issuetree[who][len_DC+len_PC+j][1] - agent.issuetree[who][len_DC+len_PC+j][0]))
 				S_numerator += abs(agent.issuetree[who][len_DC+len_PC+j][1] - agent.issuetree[who][len_DC+len_PC+j][0])
 			# print('The numerator is equal to: ' + str(S_numerator))
 			# print('The denominator is equal to: ' + str(S_denominator))
 
 			# 1.5.2.3.3. Calculation of the preference
 			if S_denominator != 0:
-				print("S", j, ", Numerator: ", S_numerator)
 				agent.issuetree[who][len_DC+len_PC+j][2] = round(S_numerator/S_denominator,3) 
 			# print('The new preference of the policy core PC' + str(j+1) + ' is: ' + str(agent.issuetree[0][len_DC+j][2]))
 			else:
 				agent.issuetree[who][len_DC+len_PC+j][2] = 0
-			print("S", j, " pref: ", agent.issuetree[who][len_DC+len_PC+j][2])
+		for j in range(len_S):
+			print("S", j+1, " pref: ", agent.issuetree[who][len_DC+len_PC+j][2])
+		print(agent.issuetree[who])
