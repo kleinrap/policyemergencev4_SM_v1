@@ -36,8 +36,8 @@ if run_type == 2:
 if run_type == 3:
 
 	# running parameters
-	run_tick = 3
-	interval_tick = 2
+	run_tick = 6
+	interval_tick = 5
 	warmup_tick = 5
 
 	# initialisation of both models
@@ -49,6 +49,10 @@ if run_type == 3:
 	print("************************")
 	print("Start of the simulation:", "\n")
 	for i in range(run_tick):
+
+		print(" ")
+		print("************************")
+		print("Tick number: ", i)
 
 		# warm up time
 		# this is also used as a warmup time
@@ -71,7 +75,6 @@ if run_type == 3:
 		for p in range(interval_tick):
 			KPIs, type0agents, type1agents = model_run_schelling.step(policy_chosen)
 			policy_chosen = [None for ite in range(len(model_run_SM.policy_instruments[0]))] # reset policy after it has been implemented once
-
 
 	# printing the data obtained from the Schelling model
 	dataPlot = model_run_schelling.datacollector.get_model_vars_dataframe()

@@ -237,7 +237,7 @@ class PolicyEmergenceSM(Model):
 
 	def module_interface_output(self):
 
-		# print("Module interface output not introduced yet")
+		print("Module interface output not introduced yet")
 
 	def preference_update(self, agent, who):
 
