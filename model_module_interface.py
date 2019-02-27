@@ -35,8 +35,8 @@ def policy_instrument_input(self, len_PC):
 
 	# definition of the policy families
 	PF_indices = [0, 0]
-	PF_indices[0] = [0, 1, 2, 3, 8, 9, 10]
-	PF_indices[1] = [4, 5, 6, 7, 8, 9, 10]
+	PF_indices[0] = [0, 1, 2, 3, 8, 9, 10]  # policy family 1
+	PF_indices[1] = [4, 5, 6, 7, 8, 9, 10]  # policy family 2
 	
 	len_ins_1 = len(len_ins_1_names)
 	len_ins_2 = len(len_ins_2_names)

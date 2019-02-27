@@ -201,6 +201,8 @@ class Schelling(Model):
         self.movementtype0 = 0  # Reset counter of movement of type 0 agents
         self.movementtype1 = 0  # Reset counter of movement of type 1 agents
 
+        # print(policy)
+
         # introduction of the selected policy in the Schelling model
         # happy check vision changes
         if policy[0] != None and self.happyCheckRadius<15 and self.happyCheckRadius>1:

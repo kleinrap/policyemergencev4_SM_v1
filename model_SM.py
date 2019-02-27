@@ -105,8 +105,6 @@ class PolicyEmergenceSM(Model):
 
 		# 3.
 		self.module_interface_output()
-		print("Policy instrument selection not implemented yet!")
-		self.policy_implemented = [None, None, None, None, None]
 
 		# end of step actions:
 		# iterate the steps counter
@@ -142,11 +140,12 @@ class PolicyEmergenceSM(Model):
 			if isinstance(agent, ActiveAgent):
 				# replacing the policy family likelihoods
 				for PFj in range(self.len_PC):
-					agent.policytree[agent.unique_id][PFj][0:self.len_PC] = truth_policytree[PFj][0:self.len_PC]
+					for PFij in range(self.len_PC):
+						agent.policytree[agent.unique_id][PFj][PFij] = truth_policytree[PFj][PFij]
 
 				# replacing the policy instruments impacts
 				for insj in range(self.len_ins_1 + self.len_ins_2 + self.len_ins_all):
-					agent.policytree[agent.unique_id][self.len_PC+insj][0:self.len_S] = truth_policytree[insj]
+					agent.policytree[agent.unique_id][self.len_PC+insj][0:self.len_S] = truth_policytree[self.len_PC+insj]
 
 				# replacing the issue beliefs from the KPIs
 				for issue in range(self.len_DC+self.len_PC+self.len_S):
@@ -225,22 +224,20 @@ class PolicyEmergenceSM(Model):
 				agent.selection_PI()
 
 		# 6. 
-		# # Note that the agenda is made ONLY with the policy makers here 
-		# selected_PI_list = []
-		# for agent in self.schedule.agent_buffer(shuffled=False):
-		# 	if isinstance(agent, ActiveAgent) and agent.agent_type == 'policymaker':  # considering only policy makers
-		# 		selected_PI_list.append(agent.selected_PF)
+		# Note that the agenda is made ONLY with the policy makers here 
+		selected_PI_list = []
+		for agent in self.schedule.agent_buffer(shuffled=False):
+			if isinstance(agent, ActiveAgent) and agent.agent_type == 'policymaker':  # considering only policy makers
+				selected_PI_list.append(agent.selected_PI)
 
-		# # finding the most common policy core issue and policy family
-		# self.agenda_PC = max(set(selected_PC_list), key=selected_PC_list.count)
-		# self.agenda_PF = max(set(selected_PF_list), key=selected_PF_list.count)
-		# print("The agenda consists of PC", self.agenda_PC, " and PF", self.agenda_PF, ".")
-
-
+		# finding the most common policy core issue and policy family
+		self.policy_implemented = max(set(selected_PI_list), key=selected_PI_list.count)
+		print("The policy instrument selected is policy instrument ", self.policy_implemented, ".")
+		self.policy_implemented = self.policy_instruments[self.policy_implemented]
 
 	def module_interface_output(self):
 
-		print("Module interface output not introduced yet")
+		# print("Module interface output not introduced yet")
 
 	def preference_update(self, agent, who):
 
