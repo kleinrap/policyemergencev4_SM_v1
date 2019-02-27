@@ -1,6 +1,6 @@
 TO DO file for the policy emergence model
 
-1. Coding in of the agents
+1. Coding in of the agents [DONE]
 	- Type of active agents (done)
 	- Positioning of the agents (done)
 	- Resources of the agents (done)
@@ -14,10 +14,10 @@ TO DO file for the policy emergence model
 	- Introduction of the electorate (done)
 	- Introduction of the truth agent (done)
 
-X. Change from -1,1 to 0,1 intervals for beliefs and goals
+X. Change from -1,1 to 0,1 intervals for beliefs and goals [DONE]
 	- Change the input file (done)
 
-2. Agenda setting step without actions
+2. Agenda setting step without actions [DONE]
 	- Agent-specific selection of issues (PC) (done)
 	- Initialise the policy instruments (done)
 	- Calculate impact of policy instruments (done)
@@ -25,8 +25,8 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals
 	- Agent-specific selection of policy families (PF) (done) 
 	- Transfer of beliefs to agents through the truth agent (done)
 	- Transfer of the issuetree to agents through the truth agent - full knowledge (done)
-	- Complete the input part of the model
-	- Creation of the agenda
+	- Complete the input part of the model (done)
+	- Creation of the agenda (done)
 
 
 	DO NOT FORGET TO RESET CHOICES OF PF AND PC AND F AND ins AT THE BEGINNING OF EACH STEP FOR THE AGENTS

@@ -82,6 +82,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	policytree = copy.deepcopy(policytree0)
 	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
 	self.preference_update(agent, unique_id)  # updating the issue tree preferences
+	print(agent.issuetree[unique_id])
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
 

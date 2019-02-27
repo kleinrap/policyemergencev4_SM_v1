@@ -39,7 +39,6 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 
 	# looking at one policy instrument after the other
 	impact_policy = [[0 for l in range(model_run_SM.len_S+model_run_SM.len_PC)] for r in range(len(model_run_SM.policy_instruments))]
-	print("S1, S2, S3, S4")
 	for j in range(len(model_run_SM.policy_instruments)):
 
 		# calculating the percentage change from no policy to a policy
@@ -56,7 +55,7 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 			if isinstance(agent, TruthAgent):
 				# updating the policy tree of the truth agent
 				agent.policytree[model_run_SM.len_PC + j] = impact_policy[j][0:model_run_SM.len_S]
-				print("Policy instrument: ", j, " - \n", agent.policytree[model_run_SM.len_PC + j])
+				# print("Policy instrument: ", j, " - \n", agent.policytree[model_run_SM.len_PC + j])
 
 	# considering the policy families
 	# policy family 1 (instruments: 0, 1, 2, 3, 8, 9, 10)
@@ -87,8 +86,3 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 			# updating the policy tree of the truth agent
 			agent.policytree[0] = likelihood_PF1
 			agent.policytree[1] = likelihood_PF2
-
-
-
-
-
