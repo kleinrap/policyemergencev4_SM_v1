@@ -469,6 +469,3 @@ class PolicyEmergenceSM(Model):
 			# print('The new preference of the policy core PC' + str(j+1) + ' is: ' + str(agent.issuetree[0][len_DC+j][2]))
 			else:
 				agent.issuetree[who][len_DC+len_PC+j][2] = 0
-		for j in range(len_S):
-			print("S", j+1, " pref: ", agent.issuetree[who][len_DC+len_PC+j][2])
-		print(agent.issuetree[who])

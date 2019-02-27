@@ -128,6 +128,34 @@ class ActiveAgent(Agent):
     def selection_S(self):
         print("Selection S not implemented yet")
 
+        '''
+        This function is used to select the preferred secondary issue. First, only the secondary issues that are related, through a causal relation, to the policy core issue on the agenda are placed into an array. Then, the one with the highest preference is selected. It is then used as the issue that the agent will advocate for later on.
+        '''
+
+        len_DC = self.model.len_DC
+        len_PC = self.model.len_PC
+        len_S = self.model.len_S
+
+        # considering only issues related to the issue on the agenda
+        S_pref_list_indices = []
+        for i in range(len_S):
+            if self.issuetree[self.unique_id][len_DC+len_PC+len_S+len_DC*len_PC+self.model.agenda_PC*len_S+i][0] !=0:
+                S_pref_list_indices.append(i)
+
+        S_pref_list = [None for i in range(len(S_pref_list_indices))]
+        for i in range(len(S_pref_list)):
+            S_pref_list[i] = self.issuetree[self.unique_id][len_DC+len_PC+S_pref_list_indices[i]][2]
+
+        # assigning the highest preference as the selected policy core issue
+        self.selected_S = S_pref_list.index(max(S_pref_list))
+        # make sure to select the right value in the list of indices (and not based on the index in the list of preferences)
+        self.selected_S = S_pref_list_indices[self.selected_S]
+
+        # print(self, self.selected_S)
+        # print("affiliation :", self.affiliation)
+        # print(self.issuetree[self.unique_id][len_DC+len_PC+self.selected_S][2])
+        # print(self.issuetree[self.unique_id])
+
     def selection_PI(self):
         print("Selection PI not implemented yet")
 

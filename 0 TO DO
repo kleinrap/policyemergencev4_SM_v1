@@ -32,7 +32,7 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals [DONE]
 	DO NOT FORGET TO RESET CHOICES OF PF AND PC AND F AND ins AT THE BEGINNING OF EACH STEP FOR THE AGENTS
 
 3. Policy formulation step without actions
-	- Agent-specific selection of issues (S)
+	- Agent-specific selection of issues (S) (done)
 	- Calculate impact of policy instruments
 	- Agent-specific selection of policies (PI)
 	- Selection of the policy to be implemented 
