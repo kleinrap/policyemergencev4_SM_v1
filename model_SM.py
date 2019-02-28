@@ -119,6 +119,8 @@ class PolicyEmergenceSM(Model):
 		print("step ends")
 		print(" ")
 
+		print(self.datacollector.get_agent_vars_dataframe())
+
 		return self.policy_implemented
 
 	def module_interface_input(self, KPIs):
