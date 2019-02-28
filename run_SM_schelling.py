@@ -36,7 +36,7 @@ if run_type == 2:
 if run_type == 3:
 
 	# running parameters
-	run_tick = 6
+	run_tick = 2
 	interval_tick = 5
 	warmup_tick = 5
 
@@ -77,9 +77,13 @@ if run_type == 3:
 			policy_chosen = [None for ite in range(len(model_run_SM.policy_instruments[0]))] # reset policy after it has been implemented once
 
 	# printing the data obtained from the Schelling model
-	dataPlot = model_run_schelling.datacollector.get_model_vars_dataframe()
-	print(dataPlot)
-	dataPlot.plot("step", "evenness")
-	dataPlot.plot("step", ["happy", "happytype0", "happytype1"])
-	dataPlot.plot("step", ["movement", "movementtype0", "movementtype1"])
+	dataPlot_Schelling = model_run_schelling.datacollector.get_model_vars_dataframe()
+	print(dataPlot_Schelling)
+	dataPlot_Schelling.plot("step", "evenness")
+	dataPlot_Schelling.plot("step", ["happy", "happytype0", "happytype1"])
+	dataPlot_Schelling.plot("step", ["movement", "movementtype0", "movementtype1"])
+
+	dataPlot_SM = model_run_SM.datacollector.get_model_vars_dataframe()
+	print(dataPlot_SM)
+
 	plt.show()

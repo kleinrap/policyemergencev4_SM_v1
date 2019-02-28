@@ -5,7 +5,7 @@ from mesa.datacollection import DataCollector
 
 from collections import defaultdict
 
-from model_SM_initialisation_agents import init_active_agents, init_electorate_agents, init_truth_agent
+from model_SM_agents_initialisation import init_active_agents, init_electorate_agents, init_truth_agent
 from model_SM_agents import ActiveAgent, ElectorateAgent, TruthAgent
 from model_module_interface import policy_instrument_input, issue_tree_input
 
@@ -30,10 +30,13 @@ class PolicyEmergenceSM(Model):
 		self.grid = SingleGrid(height, width, torus=True)
 
 		self.datacollector = DataCollector(
-			# Model-level count of happy agents
-			{"step": "stepCount"},
-			# For testing purposes, agent's individual x and y
-			{"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]})
+			# Model-level variables
+			model_reporters = {"step": "stepCount", "agenda_PC":"agenda_PC", "agenda_PF":"agenda_PF", "policy_implemented": "policy_implemented"},
+			# Agent-level variables
+			agent_reporters = {"x": lambda a: a.pos})
+
+		# "x": lambda a: a.pos[0], "y": lambda a: a.pos[1]
+		# "z": lambda a:a.issuetree
 
 		# belief tree properties
 		self.len_S, self.len_PC, self.len_DC, self.len_CR = issue_tree_input(self)

@@ -8,6 +8,7 @@ class ActiveAgent(Agent):
     Active agents, including policy makers, policy entrepreneurs and external parties.
     '''
     def __init__(self, pos, unique_id, model, agent_type, resources, affiliation, issuetree, policytree):
+        
         '''
          Args:
             unique_id: Unique identifier for the agent.

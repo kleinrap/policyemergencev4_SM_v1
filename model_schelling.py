@@ -158,7 +158,7 @@ class Schelling(Model):
             # Model-level count of happy agents
             {"step": "stepCount", "happy": "happy", "happytype0": "happytype0", "happytype1": "happytype1", "movement": "movement", "movementtype0": "movementtype0", "movementtype1": "movementtype1","evenness": "evenness", "numberOfAgents": "numberOfAgents"},
             # For testing purposes, agent's individual x and y
-            {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]})
+            {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1], "z": lambda a: a.agent_type})
 
         # Set up agents
         # We use a grid iterator that returns

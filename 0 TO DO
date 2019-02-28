@@ -1,4 +1,6 @@
-TO DO file for the policy emergence model
+TO DO LIST
+
+--- SM1 ---------------
 
 1. Coding in of the agents [DONE]
 	- Type of active agents (done)
@@ -35,9 +37,19 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals [DONE]
 	- Selection of the policy to be implemented (done)
 	- Complete the output part of the model (done)
 
-4. Policy network introduction
+4. Polish for results:
+	- Parallelise  the policy impact evaluation algorithm
+	- Create outputs (find which ones)
+	- Design the batch run algorithm
+	- Create a saving algorithm
 
-5. Actions introduction
+
+
+--- SM2 ---------------
+
+1. Policy network introduction
+
+2. Actions introduction
 
 6. Construction of the module interface
 	- Define how to initialise the beliefs of the agents (from the model or based on surveys)
