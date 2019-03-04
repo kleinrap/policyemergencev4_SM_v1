@@ -15,7 +15,7 @@ class ActiveAgent(Agent):
             x, y: Agent initial location.
             agent_type: Indicator for the agent's type (minority=1, majority=0)
         '''
-        super().__init__(pos, model)
+        super().__init__(unique_id, model)
         self.pos = pos  # defines the position of the agent on the grid
         self.unique_id = unique_id  # unique_id of the agent used for algorithmic reasons
         self.agent_type = agent_type  # defines the type of agents from policymaker, policyentrepreneur and externalparty
@@ -246,7 +246,7 @@ class ElectorateAgent(Agent):
     '''
     Electorate agents.
     '''
-    def __init__(self, pos, unique_id, model, affiliation, issuetree, representativeness):
+    def __init__(self, pos, unique_id, model, affiliation, issuetree_elec, representativeness):
         '''
          Create a new Electorate agent.
          Args:
@@ -258,14 +258,14 @@ class ElectorateAgent(Agent):
         self.pos = pos  # defines the position of the agent on the grid
         self.unique_id = unique_id  # unique_id of the agent used for algorithmic reasons
         self.affiliation = affiliation  # political affiliation affecting agent interactions
-        self.issuetree = issuetree  # issue tree of the agent (including partial issue of other agents)
+        self.issuetree_elec = issuetree_elec  # issue tree of the agent (including partial issue of other agents)
         self.representativeness = representativeness
 
 class TruthAgent(Agent):
     '''
     Truth agents.
     '''
-    def __init__(self, pos, model, issuetree, policytree):
+    def __init__(self, pos, model, issuetree_truth, policytree_truth):
         '''
          Create a new Truth agent.
          Args:
@@ -274,6 +274,6 @@ class TruthAgent(Agent):
         '''
         super().__init__(pos, model)
         self.pos = pos  # defines the position of the agent on the grid
-        self.issuetree = issuetree  # issue tree of the agent (including partial issue of other agents)
-        self.policytree = policytree
+        self.issuetree_truth = issuetree_truth  # issue tree of the agent (including partial issue of other agents)
+        self.policytree_truth = policytree_truth
     

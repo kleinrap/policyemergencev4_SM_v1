@@ -38,10 +38,14 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals [DONE]
 	- Complete the output part of the model (done)
 
 4. Polish for results:
-	- Parallelise  the policy impact evaluation algorithm
-	- Create outputs (find which ones)
+	- Parallelise  the policy impact evaluation algorithm 
+	- Create outputs (find which ones) (done)
 	- Design the batch run algorithm
-	- Create a saving algorithm
+	- Create a saving algorithm (goes with batch)
+
+For the output:
+- Check how these functions are assembling data:
+https://github.com/projectmesa/mesa/blob/master/examples/bank_reserves/batch_run.py
 
 
 

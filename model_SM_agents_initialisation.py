@@ -48,6 +48,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 			policytree_empty_agents[len_PF+m] = [None for f in range(len_S+1)]
 		policytree0.append(policytree_empty_agents)
 
+	
 	# creation of the agents
 	# policy maker 1
 	x = 0
@@ -465,6 +466,6 @@ def init_truth_agent(self, len_S, len_PC, len_DC, len_ins_1, len_ins_2, len_ins_
 	unique_id = 50 
 	issuetree = copy.deepcopy(issuetree0)
 	policytree = copy.deepcopy(policytree0)
-	agent = TruthAgent((x, y), self, issuetree, policytree)
+	agent = TruthAgent(unique_id, self, issuetree, policytree)
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)

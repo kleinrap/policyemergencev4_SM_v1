@@ -158,7 +158,9 @@ class Schelling(Model):
             # Model-level count of happy agents
             {"step": "stepCount", "happy": "happy", "happytype0": "happytype0", "happytype1": "happytype1", "movement": "movement", "movementtype0": "movementtype0", "movementtype1": "movementtype1","evenness": "evenness", "numberOfAgents": "numberOfAgents"},
             # For testing purposes, agent's individual x and y
-            {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1]})
+            {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1], "Agent type": lambda a:a.type})
+
+        # , "z": lambda a:a.type
 
         # Set up agents
         # We use a grid iterator that returns
@@ -177,7 +179,7 @@ class Schelling(Model):
                 agent = SchellingAgent((x, y), self, agent_type, last_move)
                 self.grid.position_agent(agent, (x, y))
                 self.schedule.add(agent)
-        print("Schedule: ", len(self.schedule.agents))
+        # print("Schedule: ", len(self.schedule.agents))
 
         self.running = True
         self.numberOfAgents = self.schedule.get_agent_count()
@@ -243,6 +245,12 @@ class Schelling(Model):
 
         # collect data
         self.datacollector.collect(self)
+        
+
+        # checking the datacollector
+        # if self.stepCount % 2 == 0:
+        #     print(self.datacollector.get_model_vars_dataframe())
+        #     print(self.datacollector.get_agent_vars_dataframe())
 
         if self.happy == self.schedule.get_agent_count():
             self.running = False

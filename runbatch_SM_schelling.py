@@ -12,7 +12,7 @@ The architecture present here is to be used for performing experiments. A batch 
 '''
 
 # running parameters
-run_tick = 2
+run_tick = 10
 interval_tick = 2
 warmup_tick = interval_tick
 
@@ -64,9 +64,10 @@ dataPlot_Schelling_model.plot("step", ["happy", "happytype0", "happytype1"])
 dataPlot_Schelling_model.plot("step", ["movement", "movementtype0", "movementtype1"])
 
 dataPlot_SM_model = model_run_SM.datacollector.get_model_vars_dataframe()
+dataPlot_SM_model.to_csv('Test_SM_model.csv')
 print("done - dataPlot_SM_model")
 dataPlot_SM_agents = model_run_SM.datacollector.get_agent_vars_dataframe()
-print(dataPlot_SM)
-dataPlot_SM_agents.to_csv('Test.csv')
+print(dataPlot_SM_agents)
+dataPlot_SM_agents.to_csv('Test_SM_agents.csv')
 
 # plt.show()

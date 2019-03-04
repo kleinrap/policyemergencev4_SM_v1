@@ -1,15 +1,17 @@
 from model_module_interface import issue_mapping
 from model_SM_agents import TruthAgent
 import copy
+import multiprocessing as mp
+import pickle
 
-def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, interval_tick):
+def model_simulation(model_run_SM, model_run_schelling, IssueInit, interval_tick):
 
 	'''
 	[Change policy tree/policy instruments -> Change in this function]
-	This function is used to estimate the impact of the policy instruments and likelihood of impact of the policy families.
+	This function is used to simulate the model several times for the evaluation of the policies. This happens every step so the function is present such that multi processing be allowed.
 
 	'''
-	# policy impact evaluation
+
 	# initialisation of the vector that will store the KPIs of the mock simulation for each policy instrument
 	issues = [0 for l in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC)]
 	for q in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
@@ -33,6 +35,51 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 		for p in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
 			issues[p][j] = IssueE[p]
 
+	return issues, type0agents, type1agents
+
+
+
+def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, interval_tick):
+
+	'''
+	[Change policy tree/policy instruments -> Change in this function]
+	This function is used to estimate the impact of the policy instruments and likelihood of impact of the policy families.
+
+	'''
+	# policy impact evaluation
+
+	test = pickle.dumps(model_run_schelling)
+
+	print(test)
+
+	pool = mp.Pool()
+	issues, type0agents, type1agents = pool.map(model_simulation, [model_run_SM, model_run_schelling, IssueInit, interval_tick])
+
+	# issues, type0agents, type1agents = model_simulation(model_run_SM, model_run_schelling, IssueInit, interval_tick)
+
+	# # initialisation of the vector that will store the KPIs of the mock simulation for each policy instrument
+	# issues = [0 for l in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC)]
+	# for q in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
+	# 	issues[q] = [0 for l in range(len(model_run_SM.policy_instruments))]
+
+	# # simulating all policy instruments for n ticks to obtain KPIs at the final state
+	# for j in range(len(model_run_SM.policy_instruments)):
+	# 	# copy of the model in its current state
+	# 	model_run_schelling_PI_test = copy.deepcopy(model_run_schelling)
+
+	# 	# run the simulation with policy introduced and collect data
+	# 	policy = model_run_SM.policy_instruments[j]  # set policy vector for one step
+	# 	for k in range(interval_tick):
+	# 		IssueE, type0agents, type1agents = model_run_schelling_PI_test.step(policy)
+	# 		policy = [None for f in range(len(model_run_SM.policy_instruments[j]))]  # reset policy vector after it has been implemented once
+
+	# 	# mapping the outcomes to a [0,1] interval
+	# 	IssueE = issue_mapping(IssueE, type0agents, type1agents)
+
+	# 	# store the final state of the belief (last simulation)
+	# 	for p in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
+	# 		issues[p][j] = IssueE[p]
+
 	# change the policy tree accordingly
 	# transforming initial KPIs to [0,1] interval
 	IssueInit = issue_mapping(IssueInit, type0agents, type1agents)
@@ -54,7 +101,7 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 		for agent in model_run_SM.schedule.agent_buffer(shuffled=True):
 			if isinstance(agent, TruthAgent):
 				# updating the policy tree of the truth agent
-				agent.policytree[model_run_SM.len_PC + j] = impact_policy[j][0:model_run_SM.len_S]
+				agent.policytree_truth[model_run_SM.len_PC + j] = impact_policy[j][0:model_run_SM.len_S]
 				# print("Policy instrument: ", j, " - \n", agent.policytree[model_run_SM.len_PC + j])
 
 	# considering the policy families
@@ -84,5 +131,5 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 	for agent in model_run_SM.schedule.agent_buffer(shuffled=True):
 		if isinstance(agent, TruthAgent):
 			# updating the policy tree of the truth agent
-			agent.policytree[0] = likelihood_PF1
-			agent.policytree[1] = likelihood_PF2
+			agent.policytree_truth[0] = likelihood_PF1
+			agent.policytree_truth[1] = likelihood_PF2

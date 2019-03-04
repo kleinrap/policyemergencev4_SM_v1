@@ -2,12 +2,30 @@ from mesa import Model, Agent
 from mesa.time import RandomActivation
 from mesa.space import SingleGrid
 from mesa.datacollection import DataCollector
+import numpy as np
 
 from collections import defaultdict
 
 from model_SM_agents_initialisation import init_active_agents, init_electorate_agents, init_truth_agent
 from model_SM_agents import ActiveAgent, ElectorateAgent, TruthAgent
 from model_module_interface import policy_instrument_input, issue_tree_input
+
+
+# Data collector function
+
+def get_agents_attributes(model):
+	
+	agent_attributes = []
+	for agent in model.schedule.agent_buffer(shuffled=False):
+		if isinstance(agent, ActiveAgent):
+			agent_attributes.append([agent.unique_id, agent.agent_type, agent.affiliation, agent.issuetree[agent.unique_id], agent.policytree[agent.unique_id]])
+
+	return agent_attributes
+
+def get_problem_policy_chosen(model):
+
+	return [model.agenda_PC, model.agenda_PF, model.policy_implemented_number]
+
 
 
 class PolicyEmergenceSM(Model):
@@ -25,15 +43,28 @@ class PolicyEmergenceSM(Model):
 		self.agenda_PC = None
 		self.agenda_PF = None
 		self.policy_implemented = None
+		self.policy_implemented_number = None
 
 		self.schedule = RandomActivation(self)
 		self.grid = SingleGrid(height, width, torus=True)
 
+		print()
+
 		self.datacollector = DataCollector(
 			# Model-level variables
-			model_reporters = {"step": "stepCount", "agenda_PC":"agenda_PC", "agenda_PF":"agenda_PF", "policy_implemented": "policy_implemented"},
+			model_reporters =  {
+				"step": "stepCount",
+				"AS_PF": get_problem_policy_chosen,
+				"agent_attributes": get_agents_attributes},
 			# Agent-level variables
-			agent_reporters = {"x": lambda a: a.pos})
+			agent_reporters = {
+				"x": lambda a: a.pos[0],
+				"y": lambda a: a.pos[1],
+				"Agent type": lambda a:type(a), 
+				"Issuetree": lambda a: getattr(a, 'issuetree', [None])[a.unique_id if isinstance(a, ActiveAgent) else 0]}
+			)
+
+		# , "agenda_PC":"agenda_PC", "agenda_PF":"agenda_PF", "policy_implemented": "policy_implemented"
 
 		# "x": lambda a: a.pos[0], "y": lambda a: a.pos[1]
 		# "z": lambda a:a.issuetree
@@ -119,7 +150,8 @@ class PolicyEmergenceSM(Model):
 		print("step ends")
 		print(" ")
 
-		print(self.datacollector.get_agent_vars_dataframe())
+		# print(self.datacollector.get_agent_vars_dataframe())
+		print(self.datacollector.get_model_vars_dataframe())
 
 		return self.policy_implemented
 
@@ -135,10 +167,10 @@ class PolicyEmergenceSM(Model):
 		# selection of the Truth agent policy tree and issue tree
 		for agent in self.schedule.agent_buffer(shuffled=True):
 			if isinstance(agent, TruthAgent):
-				truth_policytree = agent.policytree
+				truth_policytree = agent.policytree_truth
 				for issue in range(self.len_DC+self.len_PC+self.len_S):
-					agent.issuetree[issue] = KPIs[issue]
-				truth_issuetree = agent.issuetree
+					agent.issuetree_truth[issue] = KPIs[issue]
+				truth_issuetree = agent.issuetree_truth
 
 		# Transferring policy impact to active agents
 		for agent in self.schedule.agent_buffer(shuffled=True):
@@ -236,9 +268,9 @@ class PolicyEmergenceSM(Model):
 				selected_PI_list.append(agent.selected_PI)
 
 		# finding the most common policy core issue and policy family
-		self.policy_implemented = max(set(selected_PI_list), key=selected_PI_list.count)
-		print("The policy instrument selected is policy instrument ", self.policy_implemented, ".")
-		self.policy_implemented = self.policy_instruments[self.policy_implemented]
+		self.policy_implemented_number = max(set(selected_PI_list), key=selected_PI_list.count)
+		print("The policy instrument selected is policy instrument ", self.policy_implemented_number, ".")
+		self.policy_implemented = self.policy_instruments[self.policy_implemented_number]
 
 	def module_interface_output(self):
 
