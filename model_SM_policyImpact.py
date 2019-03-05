@@ -1,10 +1,11 @@
 from model_module_interface import issue_mapping
 from model_SM_agents import TruthAgent
 import copy
-import multiprocessing as mp
+import pathos.multiprocessing as mp
 import pickle
+import dill
 
-def model_simulation(model_run_SM, model_run_schelling, IssueInit, interval_tick):
+def model_simulation(inputs):
 
 	'''
 	[Change policy tree/policy instruments -> Change in this function]
@@ -12,6 +13,52 @@ def model_simulation(model_run_SM, model_run_schelling, IssueInit, interval_tick
 
 	'''
 
+	policy = inputs[0]
+	interval_tick = inputs[1]
+	model_run_schelling_PI_test = inputs[2]
+
+	# run the simulation with policy introduced and collect data
+	for k in range(interval_tick):
+		IssueE, type0agents, type1agents = model_run_schelling_PI_test.step(policy)
+		policy = [None for f in range(len(policy))]  # reset policy vector after it has been implemented once
+
+	return [IssueE, type0agents, type1agents]
+
+
+
+def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, interval_tick):
+
+	'''
+	[Change policy tree/policy instruments -> Change in this function]
+	This function is used to estimate the impact of the policy instruments and likelihood of impact of the policy families.
+	The simulations for the different policies are parallelised to gain computational time.
+
+	'''
+	# policy impact evaluation
+
+	# initialisation of the vector that will store the KPIs of the mock simulation for each policy instrument
+	issues = [0 for l in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC)]
+	for q in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
+		issues[q] = [0 for l in range(len(model_run_SM.policy_instruments))]
+
+	# copy of the model in its current state
+	model_run_schelling_PI_test = copy.deepcopy(model_run_schelling)
+
+	# creating the input vector for the parallelised simulation
+	inputs = []
+	for j in range(len(model_run_SM.policy_instruments)):
+		intermediate = []
+		intermediate.append(model_run_SM.policy_instruments[j])
+		intermediate.append(interval_tick)
+		intermediate.append(model_run_schelling_PI_test)
+		inputs.append(intermediate)
+
+	# running the parallel simulation
+	pool = mp.Pool(8)
+	results = pool.map(lambda a: model_simulation(a), inputs)
+
+	'''
+	OLD NON-PARALLELISED CODE
 	# initialisation of the vector that will store the KPIs of the mock simulation for each policy instrument
 	issues = [0 for l in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC)]
 	for q in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
@@ -34,51 +81,18 @@ def model_simulation(model_run_SM, model_run_schelling, IssueInit, interval_tick
 		# store the final state of the belief (last simulation)
 		for p in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
 			issues[p][j] = IssueE[p]
-
-	return issues, type0agents, type1agents
-
-
-
-def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, interval_tick):
-
 	'''
-	[Change policy tree/policy instruments -> Change in this function]
-	This function is used to estimate the impact of the policy instruments and likelihood of impact of the policy families.
 
-	'''
-	# policy impact evaluation
+	type0agents = results[0][1]
+	type1agents = results[0][2]
+	for i in range(len(results)):
 
-	test = pickle.dumps(model_run_schelling)
+		# mapping the outcomes to a [0,1] interval
+		IssueEn = issue_mapping(results[i][0], type0agents, type1agents)
 
-	print(test)
-
-	pool = mp.Pool()
-	issues, type0agents, type1agents = pool.map(model_simulation, [model_run_SM, model_run_schelling, IssueInit, interval_tick])
-
-	# issues, type0agents, type1agents = model_simulation(model_run_SM, model_run_schelling, IssueInit, interval_tick)
-
-	# # initialisation of the vector that will store the KPIs of the mock simulation for each policy instrument
-	# issues = [0 for l in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC)]
-	# for q in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
-	# 	issues[q] = [0 for l in range(len(model_run_SM.policy_instruments))]
-
-	# # simulating all policy instruments for n ticks to obtain KPIs at the final state
-	# for j in range(len(model_run_SM.policy_instruments)):
-	# 	# copy of the model in its current state
-	# 	model_run_schelling_PI_test = copy.deepcopy(model_run_schelling)
-
-	# 	# run the simulation with policy introduced and collect data
-	# 	policy = model_run_SM.policy_instruments[j]  # set policy vector for one step
-	# 	for k in range(interval_tick):
-	# 		IssueE, type0agents, type1agents = model_run_schelling_PI_test.step(policy)
-	# 		policy = [None for f in range(len(model_run_SM.policy_instruments[j]))]  # reset policy vector after it has been implemented once
-
-	# 	# mapping the outcomes to a [0,1] interval
-	# 	IssueE = issue_mapping(IssueE, type0agents, type1agents)
-
-	# 	# store the final state of the belief (last simulation)
-	# 	for p in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
-	# 		issues[p][j] = IssueE[p]
+		# store the final state of the belief (last simulation)
+		for p in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
+			issues[p][j] = IssueEn[p]
 
 	# change the policy tree accordingly
 	# transforming initial KPIs to [0,1] interval

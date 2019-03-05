@@ -203,8 +203,6 @@ class Schelling(Model):
         self.movementtype0 = 0  # Reset counter of movement of type 0 agents
         self.movementtype1 = 0  # Reset counter of movement of type 1 agents
 
-        # print(policy)
-
         # introduction of the selected policy in the Schelling model
         # happy check vision changes
         if policy[0] != None and self.happyCheckRadius<15 and self.happyCheckRadius>1:
@@ -224,8 +222,8 @@ class Schelling(Model):
 
         # run the step for the agents
         self.schedule.step()
-        print(self.movementQuotaCount, " agents moved.")
-        print(round(self.happy/self.schedule.get_agent_count() * 100,2), "percent are happy agents.")
+        # print(self.movementQuotaCount, " agents moved.")
+        # print(round(self.happy/self.schedule.get_agent_count() * 100,2), "percent are happy agents.")
 
         # calculating empty counter
         self.empty = (self.height*self.width) - self.schedule.get_agent_count()
@@ -297,4 +295,4 @@ class Schelling(Model):
                         if agents.type == 1:
                             countType1agents += 1
                     self.evenness += 0.5 * abs((countType0agents/self.type0agents) - (countType1agents/self.type1agents))
-        print("evenness :", round(self.evenness,2))
+        # print("evenness :", round(self.evenness,2))

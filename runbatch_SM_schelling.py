@@ -18,7 +18,21 @@ warmup_tick = interval_tick
 
 # initialisation of both models
 model_run_SM = PolicyEmergenceSM(10,10)
-model_run_schelling = Schelling(20, 20, 0.75, 0.4)
+
+# parameters of the Schelling model
+sch_height = 20  # height of the grid
+sch_width = 20  # width of the grid
+sch_density = 0.75  # agent percentage density on the grid
+sch_minority_pc = 0.4  # percentage of type 1 agents compared to type 0
+sch_homophilyType0 = 0.5  # homophily of type 0 agents
+sch_homophilyType1 = 0.5  # homophily of type 1 agents
+sch_movementQuota = 0.30  # initial movement quota
+sch_happyCheckRadius = 5  # initial happiness check radius
+sch_moveCheckRadius = 10  # initial movement check radius
+sch_last_move_quota = 5  # initial last moment quota
+
+# initialisation of the Schelling model
+model_run_schelling = Schelling(sch_height, sch_width, sch_density, sch_minority_pc, sch_homophilyType0, sch_homophilyType1, sch_movementQuota, sch_happyCheckRadius, sch_moveCheckRadius, sch_last_move_quota)
 
 
 print("\n")

@@ -34,7 +34,7 @@ class PolicyEmergenceSM(Model):
 	Simplest Model for the policy emergence model.
 	'''
 
-	def __init__(self, height=20, width=20, PMnumber=3, PEnumber=5, EPnumber=2):
+	def __init__(self, height=20, width=20):
 
 		self.height = height
 		self.width = width
@@ -48,8 +48,7 @@ class PolicyEmergenceSM(Model):
 		self.schedule = RandomActivation(self)
 		self.grid = SingleGrid(height, width, torus=True)
 
-		print()
-
+		# creation of the datacollector vector
 		self.datacollector = DataCollector(
 			# Model-level variables
 			model_reporters =  {
@@ -107,7 +106,8 @@ class PolicyEmergenceSM(Model):
 
 	def step(self, KPIs):
 		print(" ")
-		print("step me")
+		print("Step +1 - Policy emergence model")
+		print("Step count: ", self.stepCount)
 
 		'''
 		Main steps of the Simplest Model for policy emergence:
