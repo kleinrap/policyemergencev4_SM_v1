@@ -12,17 +12,17 @@ The architecture present here is to be used for performing experiments. A batch 
 '''
 
 # running parameters
-run_tick = 10
-interval_tick = 2
+run_tick = 50
+interval_tick = 5
 warmup_tick = interval_tick
 
 # initialisation of both models
 model_run_SM = PolicyEmergenceSM(10,10)
 
 # parameters of the Schelling model
-sch_height = 20  # height of the grid
-sch_width = 20  # width of the grid
-sch_density = 0.75  # agent percentage density on the grid
+sch_height = 30  # height of the grid
+sch_width = 30  # width of the grid
+sch_density = 0.8  # agent percentage density on the grid
 sch_minority_pc = 0.4  # percentage of type 1 agents compared to type 0
 sch_homophilyType0 = 0.5  # homophily of type 0 agents
 sch_homophilyType1 = 0.5  # homophily of type 1 agents

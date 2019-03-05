@@ -240,6 +240,8 @@ class PolicyEmergenceSM(Model):
 		3. Active agents actions [to be detailed later]
 		4. Active agents policy instrument selection update
 		5. Policy instrument selection
+
+		NOTE: THIS CODE DOESNT CONSIDER MAJORITY WHEN MORE THAN THREE POLICY MAKERS ARE INCLUDED, IT CONSIDERS THE MAXIMUM. THIS NEEDS TO BE ADAPTED TO CONSIDER 50% OR MORE!
 		'''
 
 		print("Policy formulation being introduced")

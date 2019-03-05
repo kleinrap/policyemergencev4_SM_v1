@@ -56,6 +56,7 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 	# running the parallel simulation
 	pool = mp.Pool(8)
 	results = pool.map(lambda a: model_simulation(a), inputs)
+	pool.close()
 
 	'''
 	OLD NON-PARALLELISED CODE
@@ -86,13 +87,12 @@ def policy_impact_evaluation(model_run_SM, model_run_schelling, IssueInit, inter
 	type0agents = results[0][1]
 	type1agents = results[0][2]
 	for i in range(len(results)):
-
 		# mapping the outcomes to a [0,1] interval
 		IssueEn = issue_mapping(results[i][0], type0agents, type1agents)
 
 		# store the final state of the belief (last simulation)
 		for p in range(model_run_SM.len_S + model_run_SM.len_PC + model_run_SM.len_DC):
-			issues[p][j] = IssueEn[p]
+			issues[p][i] = IssueEn[p]
 
 	# change the policy tree accordingly
 	# transforming initial KPIs to [0,1] interval
