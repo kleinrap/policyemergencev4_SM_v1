@@ -27,7 +27,7 @@ SM_EPs = 2  # number of external parties
 SM_EPs_aff = [1, 1]  # external parties distribution per affiliation
 resources_aff = [75, 75]  # resources per affiliation agent out of 100
 representativeness = [25, 75]  # electorate representativeness per affiliation
-SM_inputs = [SM_PMs, SM_PMs_aff, SM_PEs, SM_PEs_aff, SM_EPs, SM_EPs_aff, resources_aff]
+SM_inputs = [SM_PMs, SM_PMs_aff, SM_PEs, SM_PEs_aff, SM_EPs, SM_EPs_aff, resources_aff, representativeness]
 
 # initialisation of both models
 model_run_SM = PolicyEmergenceSM(SM_inputs, 10,10)

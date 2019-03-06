@@ -74,8 +74,6 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	for i in range(aff_number):
 		belief_profiles.append(belief_input.iloc[i].tolist())
 
-	print(belief_profiles)
-
 	# creation of the active agents
 	for i in range(aff_number):
 		# creation of the policy makers
