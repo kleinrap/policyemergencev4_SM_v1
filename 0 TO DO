@@ -45,8 +45,8 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals [DONE]
 
 
 CHANGES:
-	- Add 50% thresholds on the agenda setting and the policy formulation - AS is for all actors, PF is for PMs only
-	- Save all exogenous parameters from the schelling model 
+	- Create an unpacker for the output files such that they can be read fast
+
 
 For the output:
 - Check how these functions are assembling data:

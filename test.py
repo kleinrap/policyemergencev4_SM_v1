@@ -1,14 +1,7 @@
-# import numpy as np
+import csv
+import pandas as pd
 
+test = pd.read_csv('input_beliefProfiles', sep=',')
 
-# na = np.array([])
-
-# nb = np.array([1, 'qwe', 123])
-
-# print(nb)
-
-import multiprocessing as mp
-print("Number of processors: ", mp.cpu_count())
-
-import dill
-print(dill.license())
+print(test)
+print(test.iloc[0].tolist())

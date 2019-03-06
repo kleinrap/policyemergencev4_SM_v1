@@ -1,9 +1,23 @@
 import random
 import copy
+import pandas as pd
 
 from model_SM_agents import ActiveAgent, ElectorateAgent, TruthAgent
 
-def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, len_ins_2, len_ins_all):
+def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, len_ins_2, len_ins_all, SM_inputs):
+
+	# SM_inputs opening
+	SM_PMs = SM_inputs[0]  # number of policy makers
+	SM_PMs_aff = SM_inputs[1]  # policy maker distribution per affiliation
+	SM_PEs = SM_inputs[2]  # number of policy entrepreneurs
+	SM_PEs_aff = SM_inputs[3]  # policy entrepreneur distribution per affiliation
+	SM_EPs = SM_inputs[4]  # number of external parties
+	SM_EPs_aff = SM_inputs[5]  # external parties distribution per affiliation
+	resources_aff = SM_inputs[6]  # resources per affiliation agent out of 100
+
+	aff_number = len(resources_aff)
+	if aff_number!= len(SM_PMs_aff) or aff_number != len(SM_PMs_aff) or aff_number != len(SM_EPs_aff):
+		print("MISTAKE IN THE INPUTS on affiliation")
 
 	# agent global properties
 	number_activeagents = 10
@@ -48,353 +62,108 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 			policytree_empty_agents[len_PF+m] = [None for f in range(len_S+1)]
 		policytree0.append(policytree_empty_agents)
 
-	
-	# creation of the agents
-	# policy maker 1
+
+	# initialisation of a number of standard inputs
 	x = 0
 	y = 0
 	unique_id = 0
-	agent_type = 'policymaker'
-	resources = 75
-	affiliation = 0
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	len_PC_names = ["movement", "happiness"]
-	len_S_names = ["movement0", "movement1", "happy0", "happy1"]
-	issuetree[unique_id][0] = [0.4, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.5, 0.6, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.25, 0.95, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.55, 0.65, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.6, 0.35, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.35, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.65, 0.95, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
 
-	# policy maker 2
-	x = 0
-	y = 1
-	unique_id = 1
-	agent_type = 'policymaker'
-	resources = 75
-	affiliation = 0
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	issuetree[unique_id][0] = [0.4, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.5, 0.6, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.25, 0.95, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.55, 0.65, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.6, 0.35, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.35, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.65, 0.95, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
+	# loading the belief profiles
+	belief_input = pd.read_csv('input_beliefProfiles', sep=',')
+	belief_profiles = []
+	for i in range(aff_number):
+		belief_profiles.append(belief_input.iloc[i].tolist())
 
-	# policy maker 3
-	x = 0
-	y = 2
-	unique_id = 2
-	agent_type = 'policymaker'
-	resources = 75
-	affiliation = 1
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	len_PC_names = ["movement", "happiness"]
-	len_S_names = ["movement0", "movement1", "happy0", "happy1"]
-	issuetree[unique_id][0] = [0.85, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.15, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0, 0.5, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.6, 0, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.45, 0, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, 0.85, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
+	print(belief_profiles)
 
-	# policy entrepreneur 1
-	x = 1
-	y = 0
-	unique_id = 3
-	agent_type = 'policyentrepreneur'
-	resources = 75
-	affiliation = 0
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	issuetree[unique_id][0] = [0.4, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.5, 0.6, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.25, 0.95, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.55, 0.65, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.6, 0.35, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.35, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.65, 0.95, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
+	# creation of the active agents
+	for i in range(aff_number):
+		# creation of the policy makers
+		j = 0
+		while j < SM_PMs_aff[i]:
+			agent_type = 'policymaker'
+			affiliation = i
+			resources = resources_aff[i]
+			issuetree = copy.deepcopy(issuetree0)
+			# introducing the issues
+			for k in range(len_DC + len_PC + len_S):
+				issuetree[unique_id][k] = [0, belief_profiles[i][k+1], 0]
+			# introduction of the causal relations
+			for k in range(len_DC*len_PC + len_PC * len_S):
+				issuetree[unique_id][len_DC + len_PC + len_S + k][0] = belief_profiles[i][len_DC + len_PC + len_S + k+1]
+			policytree = copy.deepcopy(policytree0)
 
-	# policy entrepreneur 2
-	x = 1
-	y = 1
-	unique_id = 4
-	agent_type = 'policyentrepreneur'
-	resources = 75
-	affiliation = 0
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	issuetree[unique_id][0] = [0.4, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.5, 0.6, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.25, 0.95, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.55, 0.65, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.6, 0.35, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.35, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.65, 0.95, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
+			agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+			self.preference_update(agent, unique_id)  # updating the issue tree preferences
+			self.grid.position_agent(agent, (x, y))
+			self.schedule.add(agent)
 
-	# policy entrepreneur 3
-	x = 1
-	y = 2
-	unique_id = 5
-	agent_type = 'policyentrepreneur'
-	resources = 75
-	affiliation = 1
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	issuetree[unique_id][0] = [0.85, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.15, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0, 0.5, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.6, 0, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.45, 0, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, 0.85, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
+			# update of the standard inputs
+			x += 1
+			unique_id += 1
 
-	# policy entrepreneur 4
-	x = 1
-	y = 3
-	unique_id = 6
-	agent_type = 'policyentrepreneur'
-	resources = 75
-	affiliation = 1
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	issuetree[unique_id][0] = [0.85, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.15, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0, 0.5, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.6, 0, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.45, 0, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, 0.85, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
+			j += 1
 
-	# policy entrepreneur 5
-	x = 1
-	y = 4
-	unique_id = 7
-	agent_type = 'policyentrepreneur'
-	resources = 75
-	affiliation = 1
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	issuetree[unique_id][0] = [0.85, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.15, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0, 0.5, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.6, 0, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.45, 0, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, 0.85, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
+		# creation of the policy entrepreneurs
+		jj = 0
+		while jj < SM_PEs_aff[i]:
+			agent_type = 'policyentrepreneur'
+			affiliation = i
+			resources = resources_aff[i]
+			issuetree = copy.deepcopy(issuetree0)
+			# introducing the issues
+			for k in range(len_DC + len_PC + len_S):
+				issuetree[unique_id][k] = [0, belief_profiles[i][k+1], 0]
+			# introduction of the causal relations
+			for k in range(len_DC*len_PC + len_PC * len_S):
+				issuetree[unique_id][len_DC + len_PC + len_S + k][0] = belief_profiles[i][len_DC + len_PC + len_S + k+1]
+			policytree = copy.deepcopy(policytree0)
 
-	# external party 1
-	x = 2
-	y = 0
-	unique_id = 8
-	agent_type = 'externalparty'
-	resources = 75
-	affiliation = 0
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	issuetree[unique_id][0] = [0.4, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.5, 0.6, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0.25, 0.95, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.55, 0.65, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.6, 0.35, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.35, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.65, 0.95, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
+			agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+			self.preference_update(agent, unique_id)  # updating the issue tree preferences
+			self.grid.position_agent(agent, (x, y))
+			self.schedule.add(agent)
 
-	# external party 2
-	x = 2
-	y = 1
-	unique_id = 9
-	agent_type = 'externalparty'
-	resources = 75
-	affiliation = 1
-	issuetree = copy.deepcopy(issuetree0)
-	# issue beliefs, goals and preferences
-	issuetree[unique_id][0] = [0.85, 0.05, 0] # DC1 - Belief, Goal, Preference
-	issuetree[unique_id][1] = [0.15, 0.8, 0] # PC1 - Belief, Goal, Preference
-	issuetree[unique_id][2] = [0, 0.5, 0] # PC2 - Belief, Goal, Preference
-	issuetree[unique_id][3] = [0.6, 0, 0] # S1 - Belief, Goal, Preference
-	issuetree[unique_id][4] = [0.45, 0, 0] # S2 - Belief, Goal, Preference
-	issuetree[unique_id][5] = [0.0, 0.95, 0] # S3 - Belief, Goal, Preference
-	issuetree[unique_id][6] = [0.0, 0.85, 0] # S4 - Belief, Goal, Preference
-	# causal relations
-	issuetree[unique_id][7][0] = 0.2  # DC1 - PC1
-	issuetree[unique_id][8][0] = 0.7  # DC1 - PC2
-	issuetree[unique_id][9][0] = 0.8  # PC1 - S1
-	issuetree[unique_id][10][0] = 0.9  # PC1 - S2
-	issuetree[unique_id][11][0] = 0.85  # PC1 - S3
-	issuetree[unique_id][12][0] = 0  # PC1 - S4
-	issuetree[unique_id][13][0] = 0  # PC2 - S1
-	issuetree[unique_id][14][0] = 0  # PC2 - S2
-	issuetree[unique_id][15][0] = 0  # PC2 - S3
-	issuetree[unique_id][16][0] = -0.5  # PC2 - S4
-	# policy tree copy
-	policytree = copy.deepcopy(policytree0)
-	agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
-	self.preference_update(agent, unique_id)  # updating the issue tree preferences
-	self.grid.position_agent(agent, (x, y))
-	self.schedule.add(agent)
+			# update of the standard inputs
+			x += 1
+			y += 1
+			unique_id += 1
 
-def init_electorate_agents(self, len_S, len_PC, len_DC):
+			jj += 1
+
+		# creation of the external parties
+		jjj = 0
+		while jjj < SM_EPs_aff[i]:
+			agent_type = 'externalparty'
+			affiliation = i
+			resources = resources_aff[i]
+			issuetree = copy.deepcopy(issuetree0)
+			# introducing the issues
+			for k in range(len_DC + len_PC + len_S):
+				issuetree[unique_id][k] = [0, belief_profiles[i][k+1], 0]
+			# introduction of the causal relations
+			for k in range(len_DC*len_PC + len_PC * len_S):
+				issuetree[unique_id][len_DC + len_PC + len_S + k][0] = belief_profiles[i][len_DC + len_PC + len_S + k+1]
+			policytree = copy.deepcopy(policytree0)
+
+			agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
+			self.preference_update(agent, unique_id)  # updating the issue tree preferences
+			self.grid.position_agent(agent, (x, y))
+			self.schedule.add(agent)
+
+			# update of the standard inputs
+			x += 1
+			y += 1
+			unique_id += 1
+
+			jjj += 1
+
+	# check of the agents
+	# for agent in self.schedule.agent_buffer(shuffled=False):
+	# 		if isinstance(agent, ActiveAgent):
+	# 			print(agent.unique_id, agent.agent_type, agent.affiliation, agent.resources, agent.issuetree[agent.unique_id])
+
+def init_electorate_agents(self, len_S, len_PC, len_DC, SM_inputs):
 
 	# model issue tree structure
 	# the format for the whole issue tree is given as:
@@ -402,22 +171,26 @@ def init_electorate_agents(self, len_S, len_PC, len_DC):
 	# This only contains the goals of the electorate.
 	issuetree0 = [0 for f in range(len_DC + len_PC + len_S)]
 
+	aff_number = len(SM_inputs[6])
+	representativeness_aff = SM_inputs[7]
+
+	# loading the belief profiles
+	belief_input = pd.read_csv('input_beliefProfiles', sep=',')
+	belief_profiles = []
+	for i in range(aff_number*2):
+		belief_profiles.append(belief_input.iloc[i].tolist())
+
 	# creation of the agents
 	# electorate 1
 	x = 11
 	y = 0
 	unique_id = 100
 	affiliation = 0
-	representativeness = 74
+	representativeness = representativeness_aff[0]
 	issuetree = copy.deepcopy(issuetree0)
 	# issue goals
-	issuetree[0] = 0.05 # DC1 - Belief, Goal, Preference
-	issuetree[1] = 0.6 # PC1 - Belief, Goal, Preference
-	issuetree[2] = 0.95 # PC2 - Belief, Goal, Preference
-	issuetree[3] = 0.65 # S1 - Belief, Goal, Preference
-	issuetree[4] = 0.65 # S2 - Belief, Goal, Preference
-	issuetree[5] = 1 # S3 - Belief, Goal, Preference
-	issuetree[6] = 1 # S4 - Belief, Goal, Preference
+	for i in range(len_DC + len_PC + len_S):
+		issuetree[i] = belief_profiles[aff_number][i+1]
 	agent = ElectorateAgent((x, y), unique_id, self, affiliation, issuetree, representativeness)
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
@@ -427,19 +200,29 @@ def init_electorate_agents(self, len_S, len_PC, len_DC):
 	y = 1
 	unique_id = 101
 	affiliation = 1
-	representativeness = 26
+	representativeness = representativeness_aff[1]
 	issuetree = copy.deepcopy(issuetree0)
 	# issue goals
-	issuetree[0] = 0.05 # DC1 - Belief, Goal, Preference
-	issuetree[1] = 0.6 # PC1 - Belief, Goal, Preference
-	issuetree[2] = 0.95 # PC2 - Belief, Goal, Preference
-	issuetree[3] = 0 # S1 - Belief, Goal, Preference
-	issuetree[4] = 0 # S2 - Belief, Goal, Preference
-	issuetree[5] = 0.95 # S3 - Belief, Goal, Preference
-	issuetree[6] = 0 # S4 - Belief, Goal, Preference
+	for i in range(len_DC + len_PC + len_S):
+		issuetree[i] = belief_profiles[aff_number+1][i+1]
 	agent = ElectorateAgent((x, y), unique_id, self, affiliation, issuetree, representativeness)
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
+
+	if aff_number == 3:
+		x = 11
+		y = 2
+		unique_id = 102
+		affiliation = 3
+		representativeness = representativeness_aff[2]
+		issuetree = copy.deepcopy(issuetree0)
+		# issue goals
+		for i in range(len_DC + len_PC + len_S):
+			issuetree[i] = belief_profiles[aff_number+2][i+1]
+		agent = ElectorateAgent((x, y), unique_id, self, affiliation, issuetree, representativeness)
+		self.grid.position_agent(agent, (x, y))
+		self.schedule.add(agent)
+
 
 def init_truth_agent(self, len_S, len_PC, len_DC, len_ins_1, len_ins_2, len_ins_all):
 

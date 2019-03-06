@@ -34,16 +34,19 @@ class PolicyEmergenceSM(Model):
 	Simplest Model for the policy emergence model.
 	'''
 
-	def __init__(self, height=20, width=20):
+	def __init__(self, SM_inputs, height=20, width=20):
 
 		self.height = height
 		self.width = width
+
+		self.SM_inputs = SM_inputs
 
 		self.stepCount = 0
 		self.agenda_PC = None
 		self.agenda_PF = None
 		self.policy_implemented = None
 		self.policy_implemented_number = None
+		self.policy_formulation_run = False  # True if an agenda is found
 
 		self.schedule = RandomActivation(self)
 		self.grid = SingleGrid(height, width, torus=True)
@@ -75,11 +78,11 @@ class PolicyEmergenceSM(Model):
 		# issue tree properties
 		self.policy_instruments, self.len_ins_1, self.len_ins_2, self.len_ins_all, self.PF_indices = policy_instrument_input(self, self.len_PC)
 
-		# Set up active agents (manually for now)
-		init_active_agents(self, self.len_S, self.len_PC, self.len_DC, self.len_CR, self.len_PC, self.len_ins_1, self.len_ins_2, self.len_ins_all)
+		# Set up active agents
+		init_active_agents(self, self.len_S, self.len_PC, self.len_DC, self.len_CR, self.len_PC, self.len_ins_1, self.len_ins_2, self.len_ins_all, self.SM_inputs)
 
-		# Set up passive agents (manually for now)
-		init_electorate_agents(self, self.len_S, self.len_PC, self.len_DC)
+		# Set up passive agents
+		init_electorate_agents(self, self.len_S, self.len_PC, self.len_DC, self.SM_inputs)
 
 		# Set up truth agent
 		init_truth_agent(self, self.len_S, self.len_PC, self.len_DC, self.len_ins_1, self.len_ins_2, self.len_ins_all)
@@ -135,10 +138,13 @@ class PolicyEmergenceSM(Model):
 		self.agenda_setting()
 
 		# 2.
-		self.policy_formulation()
+		if self.policy_formulation_run:
+			self.policy_formulation()
+		else:
+			self.policy_implemented = self.policy_instruments[-1]
 
 		# 3.
-		self.module_interface_output()
+		# self.module_interface_output()
 
 		# end of step actions:
 		# iterate the steps counter
@@ -217,18 +223,41 @@ class PolicyEmergenceSM(Model):
 				agent.selection_PF()
 
 		# 6. 
-		# Note that the agenda is made ONLY with the policy makers here 
+		# All active agents considered
 		selected_PC_list = []
 		selected_PF_list = []
+		number_ActiveAgents = 0
 		for agent in self.schedule.agent_buffer(shuffled=False):
-			if isinstance(agent, ActiveAgent) and agent.agent_type == 'policymaker':  # considering only policy makers
+			if isinstance(agent, ActiveAgent):  # considering only policy makers
 				selected_PC_list.append(agent.selected_PC)
 				selected_PF_list.append(agent.selected_PF)
+				number_ActiveAgents += 1
 
-		# finding the most common policy core issue and policy family
-		self.agenda_PC = max(set(selected_PC_list), key=selected_PC_list.count)
-		self.agenda_PF = max(set(selected_PF_list), key=selected_PF_list.count)
-		print("The agenda consists of PC", self.agenda_PC, " and PF", self.agenda_PF, ".")
+		# finding the most common policy core issue and its frequency
+		d = defaultdict(int)
+		for i in selected_PC_list:
+			d[i] += 1
+		result = max(d.items(), key=lambda x: x[1])
+		agenda_PC_temp = result[0]
+		agenda_PC_temp_frequency = result[1]
+
+		# finding the most common policy family issue and its frequency
+		d = defaultdict(int)
+		for i in selected_PF_list:
+			d[i] += 1
+		result = max(d.items(), key=lambda x: x[1])
+		agenda_PF_temp = result[0]
+		agenda_PF_temp_frequency = result[1]
+
+		# checking for majority
+		if agenda_PC_temp_frequency > int(number_ActiveAgents/2) and agenda_PF_temp_frequency > int(number_ActiveAgents/2):
+			self.agenda_PC = agenda_PC_temp
+			self.agenda_PF = agenda_PF_temp
+			self.policy_formulation_run = True
+			print("The agenda consists of PC", self.agenda_PC, " and PF", self.agenda_PF, ".")
+		else:
+			self.policy_formulation_run = False
+			print("No agenda was formed, moving to the next step.")
 
 	def policy_formulation(self):
 
@@ -263,16 +292,29 @@ class PolicyEmergenceSM(Model):
 				agent.selection_PI()
 
 		# 6. 
-		# Note that the agenda is made ONLY with the policy makers here 
+		# Only policy makers considered
 		selected_PI_list = []
+		number_PMs = 0
 		for agent in self.schedule.agent_buffer(shuffled=False):
 			if isinstance(agent, ActiveAgent) and agent.agent_type == 'policymaker':  # considering only policy makers
 				selected_PI_list.append(agent.selected_PI)
+				number_PMs += 1
 
-		# finding the most common policy core issue and policy family
-		self.policy_implemented_number = max(set(selected_PI_list), key=selected_PI_list.count)
-		print("The policy instrument selected is policy instrument ", self.policy_implemented_number, ".")
-		self.policy_implemented = self.policy_instruments[self.policy_implemented_number]
+		# finding the most common secondary issue and its frequency
+		d = defaultdict(int)
+		for i in selected_PI_list:
+			d[i] += 1
+		result = max(d.items(), key=lambda x: x[1])
+		self.policy_implemented_number = result[0]
+		policy_implemented_number_frequency = result[1]
+
+		# check for the majority and implemented if satisfied
+		if policy_implemented_number_frequency > int(number_PMs/2):
+			print("The policy instrument selected is policy instrument ", self.policy_implemented_number, ".")
+			self.policy_implemented = self.policy_instruments[self.policy_implemented_number]
+		else:
+			print("No consensus on a policy instrument.")
+			self.policy_implemented = self.policy_instruments[-1] # selecting last policy instrument which is the no instrument policy instrument
 
 	def module_interface_output(self):
 
