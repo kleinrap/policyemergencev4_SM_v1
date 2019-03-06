@@ -43,6 +43,11 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals [DONE]
 	- Design the batch run algorithm
 	- Create a saving algorithm (goes with batch)
 
+
+CHANGES:
+	- Add 50% thresholds on the agenda setting and the policy formulation - AS is for all actors, PF is for PMs only
+	- Save all exogenous parameters from the schelling model 
+
 For the output:
 - Check how these functions are assembling data:
 https://github.com/projectmesa/mesa/blob/master/examples/bank_reserves/batch_run.py

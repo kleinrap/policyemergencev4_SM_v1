@@ -12,8 +12,10 @@ The architecture present here is to be used for performing experiments. A batch 
 '''
 
 # running parameters
-run_tick = 50
+total_ticks = 100
 interval_tick = 5
+run_tick = int(total_ticks/interval_tick)
+
 warmup_tick = interval_tick
 
 # initialisation of both models

@@ -156,7 +156,7 @@ class Schelling(Model):
         self.numberOfAgents = 0
         self.datacollector = DataCollector(
             # Model-level count of happy agents
-            {"step": "stepCount", "happy": "happy", "happytype0": "happytype0", "happytype1": "happytype1", "movement": "movement", "movementtype0": "movementtype0", "movementtype1": "movementtype1","evenness": "evenness", "numberOfAgents": "numberOfAgents"},
+            {"step": "stepCount", "happy": "happy", "happytype0": "happytype0", "happytype1": "happytype1", "movement": "movement", "movementtype0": "movementtype0", "movementtype1": "movementtype1","evenness": "evenness", "numberOfAgents": "numberOfAgents", "homophilyType0": "homophilyType0", "homophilyType1": "homophilyType1", "movementQuota": "movementQuota", "happyCheckRadius": "happyCheckRadius", "last_move_quota": "last_move_quota"},
             # For testing purposes, agent's individual x and y
             {"x": lambda a: a.pos[0], "y": lambda a: a.pos[1], "Agent type": lambda a:a.type})
 
