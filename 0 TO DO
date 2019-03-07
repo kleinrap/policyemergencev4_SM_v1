@@ -40,21 +40,16 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals [DONE]
 4. Polish for results:
 	- Parallelise  the policy impact evaluation algorithm (done)
 	- Create outputs (find which ones) (done)
-	- Design the batch run algorithm
-	- Create a saving algorithm (goes with batch)
-
-
-CHANGES:
-	- Create an unpacker for the output files such that they can be read fast
-
-
-For the output:
-- Check how these functions are assembling data:
-https://github.com/projectmesa/mesa/blob/master/examples/bank_reserves/batch_run.py
+	- Change the agenda and policy selection (done)
+	- Automate the input of the policy emergence model (done)
+	- Save all exogenous parameters in the Schelling model (done)
+	- Design the batch run algorithm (no need for now)
+	- Create a saving algorithm (goes with batch) (done - limited for now)
+	- Create an unpacker for the outputs
 
 
 
---- SM2 ---------------
+--- SM2 + electorate ---------------
 
 1. Policy network introduction
 

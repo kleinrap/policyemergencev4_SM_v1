@@ -14,6 +14,7 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	SM_EPs = SM_inputs[4]  # number of external parties
 	SM_EPs_aff = SM_inputs[5]  # external parties distribution per affiliation
 	resources_aff = SM_inputs[6]  # resources per affiliation agent out of 100
+	belief_profiles = SM_inputs[8]  # belief profiles for active agents and electorate
 
 	aff_number = len(resources_aff)
 	if aff_number!= len(SM_PMs_aff) or aff_number != len(SM_PMs_aff) or aff_number != len(SM_EPs_aff):
@@ -67,12 +68,6 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	x = 0
 	y = 0
 	unique_id = 0
-
-	# loading the belief profiles
-	belief_input = pd.read_csv('input_beliefProfiles', sep=',')
-	belief_profiles = []
-	for i in range(aff_number):
-		belief_profiles.append(belief_input.iloc[i].tolist())
 
 	# creation of the active agents
 	for i in range(aff_number):
@@ -171,12 +166,7 @@ def init_electorate_agents(self, len_S, len_PC, len_DC, SM_inputs):
 
 	aff_number = len(SM_inputs[6])
 	representativeness_aff = SM_inputs[7]
-
-	# loading the belief profiles
-	belief_input = pd.read_csv('input_beliefProfiles', sep=',')
-	belief_profiles = []
-	for i in range(aff_number*2):
-		belief_profiles.append(belief_input.iloc[i].tolist())
+	belief_profiles = SM_inputs[8]
 
 	# creation of the agents
 	# electorate 1
