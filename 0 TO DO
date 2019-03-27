@@ -1,6 +1,6 @@
 TO DO LIST
 
---- SM1 ---------------
+--- SM ---------------
 
 1. Coding in of the agents [DONE]
 	- Type of active agents (done)
@@ -47,9 +47,11 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals [DONE]
 	- Create a saving algorithm (goes with batch) (done - limited for now)
 	- Create an unpacker for the outputs
 
+--- SM+1 electorate ---------------
 
+1. Add the electorate
 
---- SM2 + electorate ---------------
+--- SM+1 electorate ---------------
 
 1. Policy network introduction
 

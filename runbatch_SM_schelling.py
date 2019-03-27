@@ -40,12 +40,12 @@ for i in range(len(resources_aff)*2):
 SM_inputs = [SM_PMs, SM_PMs_aff, SM_PEs, SM_PEs_aff, SM_EPs, SM_EPs_aff, resources_aff, representativeness, belief_profiles]
 
 # parameters of the Schelling model
-sch_height = 30  # height of the grid
-sch_width = 30  # width of the grid
+sch_height = 20  # height of the grid - this value must be a multiple of 4
+sch_width = 20  # width of the grid - this value must be a multiple of 4
 sch_density = 0.8  # agent percentage density on the grid
 sch_minority_pc = 0.4  # percentage of type 1 agents compared to type 0
 sch_homophilyType0 = 0.7  # homophily of type 0 agents
-sch_homophilyType1 = 0.7  # homophily of type 1 agents
+sch_homophilyType1 = 0.5  # homophily of type 1 agents
 sch_movementQuota = 0.30  # initial movement quota
 sch_happyCheckRadius = 5  # initial happiness check radius
 sch_moveCheckRadius = 10  # initial movement check radius

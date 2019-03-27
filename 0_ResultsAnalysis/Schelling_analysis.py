@@ -72,12 +72,17 @@ for i in range(total_runs):
 		last_move_quota[i].append(row['last_move_quota'])
 
 
+for i in range(total_runs):
+# 	numberOfAgentsmovementQuota = [i] = movementQuota[i]*numberOfAgents[i]
+	movementQuota[i] = [x*numberOfAgents[i][0] for x in movementQuota[i]]
+	print(movementQuota[i])
+
 # Looking at all the models at once for all technical model variables
 f, axarr = plt.subplots(1, 4, figsize=(11,3.5))
 for i in range(total_runs):
-	axarr[0].plot(steps[i], happy[i], color = 'b', linewidth=1, label='Happy')
+	axarr[0].plot(steps[i], happy[i], color = 'r', linewidth=1, label='Happy')
 	axarr[0].plot(steps[i], happytype0[i], color = 'g', linewidth=2, label='Happy 0')
-	axarr[0].plot(steps[i], happytype1[i], color = 'k', linewidth=3, label='Happy 1')
+	axarr[0].plot(steps[i], happytype1[i], color = 'b', linewidth=2, label='Happy 1')
 # plt.legend(handles=[burnt_line, camp_site_line, empy_line, thick_forest_line, thin_forest_line])
 axarr[0].set_title('Happiness')
 axarr[0].set_xlim([0, 20])
@@ -86,15 +91,39 @@ axarr[0].legend
 axarr[0].grid(True)
 
 for i in range(total_runs):
-	axarr[1].plot(steps[i], movement[i], color = 'b', linewidth=1, label='Movement')
-	axarr[1].plot(steps[i], movementtype1[i], color = 'g', linewidth=1, label='Movement 0')
-	axarr[1].plot(steps[i], movementtype1[i], color = 'k', linewidth=1, label='Movement 1')
+	axarr[1].plot(steps[i], movement[i], color = 'r', linewidth=1, label='Movement')
+	axarr[1].plot(steps[i], movementtype0[i], color = 'g', linewidth=1, label='Movement 0')
+	axarr[1].plot(steps[i], movementtype1[i], color = 'b', linewidth=1, label='Movement 1')
+	axarr[1].plot(steps[i], movementQuota[i], color = 'k', linewidth=1, label='movementQuota')
 # plt.legend(handles=[movement, movementtype1 , movementtype2])
 axarr[1].set_title('Movement')
 axarr[1].set_xlim([0, 20])
 axarr[1].set_ylim([0, 250])
 axarr[1].legend
 axarr[1].grid(True)
+
+print("test", numberOfAgents[i][0])
+
+for i in range(total_runs):
+	axarr[2].plot(steps[i], homophilyType0[i], color = 'g', linewidth=1, label='homophilyType0')
+	axarr[2].plot(steps[i], homophilyType1[i], color = 'b', linewidth=1, label='homophilyType1')
+	
+# plt.legend(handles=[movement, movementtype1 , movementtype2])
+axarr[2].set_title('Homophily')
+axarr[2].set_xlim([0, 20])
+axarr[2].set_ylim([0, 1])
+axarr[2].legend
+axarr[2].grid(True)
+
+for i in range(total_runs):
+	axarr[3].plot(steps[i], evenness[i], color = 'r', linewidth=1, label='evenness')
+	# axarr[3].plot(steps[i], homophilyType0[i], color = 'g', linewidth=1, label='homophilyType1')
+# plt.legend(handles=[movement, movementtype1 , movementtype2])
+axarr[3].set_title('evenness')
+axarr[3].set_xlim([0, 20])
+axarr[3].set_ylim([0, 1])
+axarr[3].legend
+axarr[3].grid(True)
 
 plt.show()
 

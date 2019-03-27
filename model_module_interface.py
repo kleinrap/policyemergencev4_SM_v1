@@ -56,7 +56,7 @@ def policy_instrument_input(self, len_PC):
 	policy_instruments[5] = [None, None, None, +0.05, None]  # PI2.2 - Vi,Mo,LMo,T0P,T1P
 	policy_instruments[6] = [None, None, None, None, -0.05]  # PI2.3 - Vi,Mo,LMo,T0P,T1P
 	policy_instruments[7] = [None, None, None, None, +0.05]  # PI2.4 - Vi,Mo,LMo,T0P,T1P
-	policy_instruments[8] = [-1, None, None, None, None]  # PIA.1 - Vi,Mo,LMo,T0P,T1P
+	policy_instruments[8] = [-1, None, None, None, None]  # PI2.1 - Vi,Mo,LMo,T0P,T1P
 	policy_instruments[9] = [+1, None, None, None, None]  # PI2.2 - Vi,Mo,LMo,T0P,T1P
 	# the no policy option is always presented to the agents as the last instrument
 	policy_instruments[10] = [None, None, None, None, None]  # PINone - Vi,Mo,LMo,T0P,T1P
