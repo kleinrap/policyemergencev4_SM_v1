@@ -8,7 +8,7 @@ df_Bplus = []
 df_3S = []
 df_ACF = []
 
-total_runs = 5
+total_runs = 4
 Sch_model = []
 Sch_agents = []
 
