@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import copy
 import pandas as pd
 import os
+from model_SM_agents import ActiveAgent
 
 from model_SM_policyImpact import policy_impact_evaluation
 from model_module_interface import issue_mapping
@@ -32,12 +33,12 @@ SM_EPs = 2  # number of external parties
 SM_EPs_aff = [1, 1]  # external parties distribution per affiliation
 resources_aff = [75, 75]  # resources per affiliation agent out of 100
 representativeness = [25, 75]  # electorate representativeness per affiliation
-input_beliefProfiles_file = 'input_beliefProfiles'
-belief_input = pd.read_csv(input_beliefProfiles_file, sep=',')
-belief_profiles = []
+input_goalProfiles_file = 'input_goalProfiles'
+goal_input = pd.read_csv(input_goalProfiles_file, sep=',')
+goal_profiles = []
 for i in range(len(resources_aff)*2):
-	belief_profiles.append(belief_input.iloc[i].tolist())  # belief profiles for active agents and electorate
-SM_inputs = [SM_PMs, SM_PMs_aff, SM_PEs, SM_PEs_aff, SM_EPs, SM_EPs_aff, resources_aff, representativeness, belief_profiles]
+	goal_profiles.append(goal_input.iloc[i].tolist())  # goal profiles for active agents and electorate
+SM_inputs = [SM_PMs, SM_PMs_aff, SM_PEs, SM_PEs_aff, SM_EPs, SM_EPs_aff, resources_aff, representativeness, goal_profiles]
 
 # parameters of the Schelling model
 sch_height = 20  # height of the grid - this value must be a multiple of 4
@@ -52,7 +53,6 @@ sch_moveCheckRadius = 10  # initial movement check radius
 sch_last_move_quota = 5  # initial last moment quota
 
 
-
 # runnin a number of repetitions
 for i_runs in range(repetitions_runs):
 
@@ -61,6 +61,9 @@ for i_runs in range(repetitions_runs):
 
 	# initialisation of both models
 	model_run_SM = PolicyEmergenceSM(SM_inputs, 10,10)
+	for agent in model_run_SM.schedule.agent_buffer(shuffled=True):
+		if isinstance(agent, ActiveAgent):
+			print(agent.affiliation)
 
 	print("\n")
 	print("************************")

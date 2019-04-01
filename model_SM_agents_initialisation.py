@@ -14,14 +14,14 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	SM_EPs = SM_inputs[4]  # number of external parties
 	SM_EPs_aff = SM_inputs[5]  # external parties distribution per affiliation
 	resources_aff = SM_inputs[6]  # resources per affiliation agent out of 100
-	belief_profiles = SM_inputs[8]  # belief profiles for active agents and electorate
+	goal_profiles = SM_inputs[8]  # goal profiles for active agents and electorate
 
 	aff_number = len(resources_aff)
 	if aff_number!= len(SM_PMs_aff) or aff_number != len(SM_PMs_aff) or aff_number != len(SM_EPs_aff):
 		print("MISTAKE IN THE INPUTS on affiliation")
 
 	# agent global properties
-	number_activeagents = 10
+	number_activeagents = SM_EPs + SM_PMs + SM_PEs
 
 	# model issue tree structure
 	issuetree0 = [None]
@@ -80,10 +80,10 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 			issuetree = copy.deepcopy(issuetree0)
 			# introducing the issues
 			for k in range(len_DC + len_PC + len_S):
-				issuetree[unique_id][k] = [0, belief_profiles[i][k+1], 0]
+				issuetree[unique_id][k] = [0, goal_profiles[i][k+1], 0]
 			# introduction of the causal relations
 			for k in range(len_DC*len_PC + len_PC * len_S):
-				issuetree[unique_id][len_DC + len_PC + len_S + k][0] = belief_profiles[i][len_DC + len_PC + len_S + k+1]
+				issuetree[unique_id][len_DC + len_PC + len_S + k][0] = goal_profiles[i][len_DC + len_PC + len_S + k+1]
 			policytree = copy.deepcopy(policytree0)
 
 			agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
@@ -106,10 +106,10 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 			issuetree = copy.deepcopy(issuetree0)
 			# introducing the issues
 			for k in range(len_DC + len_PC + len_S):
-				issuetree[unique_id][k] = [0, belief_profiles[i][k+1], 0]
+				issuetree[unique_id][k] = [0, goal_profiles[i][k+1], 0]
 			# introduction of the causal relations
 			for k in range(len_DC*len_PC + len_PC * len_S):
-				issuetree[unique_id][len_DC + len_PC + len_S + k][0] = belief_profiles[i][len_DC + len_PC + len_S + k+1]
+				issuetree[unique_id][len_DC + len_PC + len_S + k][0] = goal_profiles[i][len_DC + len_PC + len_S + k+1]
 			policytree = copy.deepcopy(policytree0)
 
 			agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
@@ -133,10 +133,10 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 			issuetree = copy.deepcopy(issuetree0)
 			# introducing the issues
 			for k in range(len_DC + len_PC + len_S):
-				issuetree[unique_id][k] = [0, belief_profiles[i][k+1], 0]
+				issuetree[unique_id][k] = [0, goal_profiles[i][k+1], 0]
 			# introduction of the causal relations
 			for k in range(len_DC*len_PC + len_PC * len_S):
-				issuetree[unique_id][len_DC + len_PC + len_S + k][0] = belief_profiles[i][len_DC + len_PC + len_S + k+1]
+				issuetree[unique_id][len_DC + len_PC + len_S + k][0] = goal_profiles[i][len_DC + len_PC + len_S + k+1]
 			policytree = copy.deepcopy(policytree0)
 
 			agent = ActiveAgent((x, y), unique_id, self, agent_type, resources, affiliation, issuetree, policytree)
@@ -166,7 +166,7 @@ def init_electorate_agents(self, len_S, len_PC, len_DC, SM_inputs):
 
 	aff_number = len(SM_inputs[6])
 	representativeness_aff = SM_inputs[7]
-	belief_profiles = SM_inputs[8]
+	goal_profiles = SM_inputs[8]
 
 	# creation of the agents
 	# electorate 1
@@ -178,7 +178,7 @@ def init_electorate_agents(self, len_S, len_PC, len_DC, SM_inputs):
 	issuetree = copy.deepcopy(issuetree0)
 	# issue goals
 	for i in range(len_DC + len_PC + len_S):
-		issuetree[i] = belief_profiles[aff_number][i+1]
+		issuetree[i] = goal_profiles[aff_number][i+1]
 	agent = ElectorateAgent((x, y), unique_id, self, affiliation, issuetree, representativeness)
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
@@ -192,7 +192,7 @@ def init_electorate_agents(self, len_S, len_PC, len_DC, SM_inputs):
 	issuetree = copy.deepcopy(issuetree0)
 	# issue goals
 	for i in range(len_DC + len_PC + len_S):
-		issuetree[i] = belief_profiles[aff_number+1][i+1]
+		issuetree[i] = goal_profiles[aff_number+1][i+1]
 	agent = ElectorateAgent((x, y), unique_id, self, affiliation, issuetree, representativeness)
 	self.grid.position_agent(agent, (x, y))
 	self.schedule.add(agent)
@@ -206,7 +206,7 @@ def init_electorate_agents(self, len_S, len_PC, len_DC, SM_inputs):
 		issuetree = copy.deepcopy(issuetree0)
 		# issue goals
 		for i in range(len_DC + len_PC + len_S):
-			issuetree[i] = belief_profiles[aff_number+2][i+1]
+			issuetree[i] = goal_profiles[aff_number+2][i+1]
 		agent = ElectorateAgent((x, y), unique_id, self, affiliation, issuetree, representativeness)
 		self.grid.position_agent(agent, (x, y))
 		self.schedule.add(agent)
