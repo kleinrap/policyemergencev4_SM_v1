@@ -18,15 +18,14 @@ def get_agents_attributes(model):
 	agent_attributes = []
 	for agent in model.schedule.agent_buffer(shuffled=False):
 		if isinstance(agent, ActiveAgent):
-			agent_attributes.append([agent.unique_id, agent.agent_type, agent.affiliation, agent.issuetree[agent.unique_id], agent.policytree[agent.unique_id]])
+			_unique_id = agent.unique_id
+			agent_attributes.append([_unique_id, agent.agent_type, agent.affiliation, agent.selected_PC, agent.selected_PF, agent.selected_S, agent.selected_PI, agent.issuetree[_unique_id], agent.policytree[_unique_id]])
 
 	return agent_attributes
 
 def get_problem_policy_chosen(model):
 
 	return [model.agenda_PC, model.agenda_PF, model.policy_implemented_number]
-
-
 
 class PolicyEmergenceSM(Model):
 

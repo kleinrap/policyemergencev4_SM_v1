@@ -4,6 +4,24 @@ import pandas as pd
 
 from model_SM_agents import ActiveAgent, ElectorateAgent, TruthAgent
 
+def issuetree_creation(self, len_DC, len_PC, len_S, len_CR):
+
+	issuetree = [[None, None, None] for f in range(len_DC + len_PC + len_S)]
+	for p in range(len_CR):
+		issuetree.append([None])
+
+	return issuetree
+
+def policytree_creation(self, len_PC, len_S, len_PF, len_ins_1, len_ins_2, len_ins_all):
+	policytree = [[None] for f in range(len_PF + len_ins_1 + len_ins_2 + len_ins_all)]
+	for n in range(len_PC):
+		policytree[n] = [None for f in range(len_PC + 1)] # +1 is placed for the inclusion of preferences
+	for m in range(len_ins_1+len_ins_2 + len_ins_all):
+		policytree[len_PF+m] = [None for f in range(len_S+1)] # +1 is placed for the inclusion of preferences
+
+	return policytree
+
+
 def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, len_ins_2, len_ins_all, SM_inputs):
 
 	# SM_inputs opening
@@ -32,16 +50,9 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# [issues] = [[DC1], ...,[DCn],[PC1],..,[PCn],[S1],...,[Sn]]
 	# [causal relations] = [[DC1-PC1],...,[DC1-PCn],...,[DCn-PCn],[PC1-S1],...,[PC1-Sn],...,[PCn-Sn],]
 	# the format of the issue is: [X] = [0, 0, 0] = [beliefs, goals, preferences]
-	issuetree_empty_issues = [[None, None, None] for f in range(len_DC + len_PC + len_S)]
-	issuetree_full = issuetree_empty_issues
-	for p in range(len_CR):
-		issuetree_full.append([None])
-	issuetree0[0] = issuetree_full
+	issuetree0[0] = issuetree_creation(self, len_DC, len_PC, len_S, len_CR) # using the newly made function
 	for r in range(number_activeagents):
-		issuetree_empty_agents = [[None, None, None] for p in range(len_DC + len_PC + len_S)]
-		for f in range(len_CR):
-			issuetree_empty_agents.append([None])
-		issuetree0.append(issuetree_empty_agents)
+		issuetree0.append(issuetree_creation(self, len_DC, len_PC, len_S, len_CR))
 
 	# model policy tree structure
 	# The format for the whole tree is given as - this policy tree is filled with the perception of other agent's policy impacts:
@@ -50,19 +61,9 @@ def init_active_agents(self, len_S, len_PC, len_DC, len_CR, len_PF, len_ins_1, l
 	# [PF1] = [PC1,...,PCn, Preference]
 	# [PI1.1] = [S1,...,Sn, Preference]
 	policytree0 = [None]
-	policytree0[0] = [[None] for f in range(len_PF + len_ins_1 + len_ins_2 + len_ins_all)]
-	for n in range(len_PC):
-		policytree0[0][n] = [None for f in range(len_PC + 1)] # +1 is placed for the inclusion of preferences
-	for m in range(len_ins_1 + len_ins_2 + len_ins_all):
-		policytree0[0][len_PF+m] = [None for f in range(len_S+1)]  # +1 is placed for the inclusion of preferences
+	policytree0[0] = policytree_creation(self, len_PC, len_S, len_PF, len_ins_1, len_ins_2, len_ins_all)
 	for r in range(number_activeagents):
-		policytree_empty_agents = [[None] for f in range(len_PF + len_ins_1 + len_ins_2 + len_ins_all)]
-		for n in range(len_PC):
-			policytree_empty_agents[n] = [None for f in range(len_PC + 1)]
-		for m in range(len_ins_1+len_ins_2 + len_ins_all):
-			policytree_empty_agents[len_PF+m] = [None for f in range(len_S+1)]
-		policytree0.append(policytree_empty_agents)
-
+		policytree0.append(policytree_creation(self, len_PC, len_S, len_PF, len_ins_1, len_ins_2, len_ins_all))
 
 	# initialisation of a number of standard inputs
 	x = 0

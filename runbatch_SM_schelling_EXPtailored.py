@@ -8,6 +8,7 @@ import os
 from model_SM_policyImpact import policy_impact_evaluation
 from model_module_interface import issue_mapping
 from model_SM_agents import TruthAgent, ActiveAgent
+from model_SM_agents_initialisation import issuetree_creation, policytree_creation
 
 '''
 The architecture present here is to be used for performing experiments. A batch runner algorithm will be used such that a set of experiments can be run at the same time.
@@ -18,7 +19,7 @@ repetitions_runs = 5
 exp_number = 0
 
 # running parameters
-total_ticks = 30
+total_ticks = 155
 interval_tick = 5
 run_tick = int(total_ticks/interval_tick)
 warmup_tick = interval_tick
@@ -71,20 +72,19 @@ for i in range(len(resources_aff)*2):
 # putting all of the profiles into one list
 goal_profiles = [goal_profiles_Ex1, goal_profiles_Ex2, goal_profiles_Ex3Be, goal_profiles_Ex3Af]
 
-# creating a loop for the three experiments
+# running a number of experiments
 for exp_i in range (3):
 
 	# creating the agents for the policy emergence model
 	SM_inputs = [SM_PMs, SM_PMs_aff, SM_PEs, SM_PEs_aff, SM_EPs, SM_EPs_aff, resources_aff, representativeness, goal_profiles[exp_i]]
 
-
-	# runnin a number of repetitions
-	for i_runs in range(repetitions_runs):
+	# running a number of repetitions per experiment
+	for rep_runs in range(repetitions_runs):
 
 		# initialisation of the Schelling model
 		model_run_schelling = Schelling(sch_height, sch_width, sch_density, sch_minority_pc, sch_homophilyType0, sch_homophilyType1, sch_movementQuota, sch_happyCheckRadius, sch_moveCheckRadius, sch_last_move_quota)
 
-		# initialisation of both models
+		# initialisation of the policy emergence model
 		model_run_SM = PolicyEmergenceSM(SM_inputs, 10,10)
 
 		print("\n")
@@ -123,25 +123,24 @@ for exp_i in range (3):
 			These changes are happening at the midway point of the simulation.
 			Three experiments are being considered. The details are provided in the formalisation report.
 			'''
-			if i == 1 and exp_i == 0:
+			# redefining the issue tree basics - hardcoded values for simplicity
+			issuetree_virgin = issuetree_creation(model_run_SM, model_run_SM.len_DC, model_run_SM.len_PC, model_run_SM.len_S, model_run_SM.len_CR)
+			policytree_virgin = policytree_creation(model_run_SM, model_run_SM.len_PC, model_run_SM.len_S, model_run_SM.len_PC, model_run_SM.len_ins_1, model_run_SM.len_ins_2, model_run_SM.len_ins_all)
+			
+			if i == 15 and exp_i == 0:
 				'''
 				Experiment 1 - Changes
 				- One PM from affiliation 0 to 1 with corresponding goal changes
 				- Two PEs added to affiliation 0 with corresponding goals
 				'''
 
-				# redefining the issue tree basics
-				issuetree_empty_issues = [[None, None, None] for f in range(7)]
-				issuetree_full = issuetree_empty_issues
-				for p in range(10):
-					issuetree_full.append([None])
-
 				change = True
 				obtained = True
 				for agent in model_run_SM.schedule.agent_buffer(shuffled=False):
+					# changing the policy maker
 					if isinstance(agent, ActiveAgent) and agent.agent_type == 'policymaker' and agent.affiliation == 0 and change == True:
 						_unique_id = agent.unique_id
-						# changing the policy maker
+						
 						agent.affiliation = 1
 						for issue in range(7): # seven is hardcoded here - issue goals replacement
 							# changing the goals to the goals of the new affiliation
@@ -149,27 +148,26 @@ for exp_i in range (3):
 							agent.issuetree[_unique_id][issue][1] = goal_profiles[exp_i][1][issue + 1]
 						change = False  # stop the for loop once one agent has been changed
 
+					# adapting the size of the issuetree and the policytree
 					if isinstance(agent, ActiveAgent):
 						for added_tree in range(2):  # number of added agents
-							agent.issuetree.append(issuetree_full)
+							agent.issuetree.append(issuetree_virgin)
+							agent.policytree.append(policytree_virgin)
 
 					# obtaining the issue tree for thepolicy entrepreneur
 					if isinstance(agent, ActiveAgent) and agent.affiliation == 0 and obtained == True:
-						_unique_id = agent.unique_id
-						_issuetree_0 = agent.issuetree
+						_unique_id = copy.deepcopy(agent.unique_id)
+						_issuetree_0 = copy.deepcopy(agent.issuetree)
 						_issuetree_0[_unique_id] = _issuetree_0[_unique_id + 1]  # making sure to reset the issue tree
-						_policytree_0 = agent.policytree
+						_policytree_0 = copy.deepcopy(agent.policytree)
+						_policytree_0[_unique_id] = _policytree_0[_unique_id + 1]  # making sure to reset the policy tree
 						obtained = False
 
-
-
-				IT IS NOT ADDING TWO AGENTS --- JUST ADDING ONE -- WHY NOT
-
 				# adding two PEs to affiliation 0
-				for add_PEs in range(2):
-					x = 55
-					y = 55
-					unique_id = 11
+				x = 55
+				y = 55
+				unique_id = 10
+				for add_PEs in range(2):					
 					agent_type = 'policyentrepreneur'
 					affiliation = 0
 					resources = 0  # not important for this model
@@ -178,7 +176,7 @@ for exp_i in range (3):
 					for issue in range(7): # seven is hardcoded here - caural relations replacement
 						# changing the goals to the goals of the new affiliation
 						# goal_profiles[Experiment][affiliation][issue + 1]
-						issuetree[unique_id][issue][1] = goal_profiles[exp_i][1][issue + 1]
+						issuetree[unique_id][issue][1] = goal_profiles[exp_i][affiliation][issue + 1]
 					for CR in range(10): # ten is hardcoded here - issues replacement
 						# goal_profiles[Experiment][affiliation][issue + 1]
 						issuetree[unique_id][7 + CR][0] = goal_profiles[exp_i][affiliation][7 + issue + 1]
@@ -191,22 +189,8 @@ for exp_i in range (3):
 					model_run_SM.schedule.add(agent)
 
 					# update of the standard inputs
-					x += 1
 					y += 1
 					unique_id += 1
-
-				for agent in model_run_SM.schedule.agent_buffer(shuffled=False):
-					if isinstance(agent, ActiveAgent):
-						print(' ')
-						print(agent.agent_type, '\n', 'ID', agent.unique_id, 'Aff', agent.affiliation, agent.issuetree[agent.unique_id])
-
-				# for agent in model_run_SM.schedule.agent_buffer(shuffled=False):
-				# 	if isinstance(agent, ActiveAgent) and agent.agent_type == 'policyentrepreneur':
-				# 		print(' ')
-				# 		print(agent.agent_type, 'ID', agent.unique_id, 'Aff', agent.affiliation, agent.issuetree[agent.unique_id])
-
-				
-
 				
 			if i == 15 and exp_i == 1:
 				'''
@@ -214,8 +198,51 @@ for exp_i in range (3):
 				- Two PEs added to affiliation 1 with corresondping goals
 				'''
 
-				pass
+				obtained = True
+				for agent in model_run_SM.schedule.agent_buffer(shuffled=False):
+					# adapting the size of the issuetree and the policytree
+					if isinstance(agent, ActiveAgent):
+						for added_tree in range(2):  # number of added agents
+							agent.issuetree.append(issuetree_virgin)
+							agent.policytree.append(policytree_virgin)
 
+					# obtaining the issue tree for thepolicy entrepreneur
+					if isinstance(agent, ActiveAgent) and agent.affiliation == 1 and obtained == True:
+						_unique_id = copy.deepcopy(agent.unique_id)
+						_issuetree_0 = copy.deepcopy(agent.issuetree)
+						_issuetree_0[_unique_id] = _issuetree_0[_unique_id + 1]  # making sure to reset the issue tree
+						_policytree_0 = copy.deepcopy(agent.policytree)
+						_policytree_0[_unique_id] = _policytree_0[_unique_id + 1]  # making sure to reset the policy tree
+						obtained = False
+
+				# adding two PEs to affiliation 0
+				x = 55
+				y = 55
+				unique_id = 10
+				for add_PEs in range(2):					
+					agent_type = 'policyentrepreneur'
+					affiliation = 1
+					resources = 0  # not important for this model
+					issuetree = copy.deepcopy(_issuetree_0)
+					# introducing the issues
+					for issue in range(7): # seven is hardcoded here - caural relations replacement
+						# changing the goals to the goals of the new affiliation
+						# goal_profiles[Experiment][affiliation][issue + 1]
+						issuetree[unique_id][issue][1] = goal_profiles[exp_i][affiliation][issue + 1]
+					for CR in range(10): # ten is hardcoded here - issues replacement
+						# goal_profiles[Experiment][affiliation][issue + 1]
+						issuetree[unique_id][7 + CR][0] = goal_profiles[exp_i][affiliation][7 + issue + 1]
+
+					policytree = copy.deepcopy(_policytree_0)
+
+					agent = ActiveAgent((x, y), unique_id, model_run_SM, agent_type, resources, affiliation, issuetree, policytree)
+					model_run_SM.preference_update(agent, unique_id)  # updating the issue tree preferences
+					model_run_SM.grid.position_agent(agent, (x, y))
+					model_run_SM.schedule.add(agent)
+
+					# update of the standard inputs
+					y += 1
+					unique_id += 1
 
 			if i == 15 and exp_i == 2:
 				'''
@@ -223,7 +250,25 @@ for exp_i in range (3):
 				- One PM from affiliation 0 to 1 with corresponding goal changes
 				'''
 
-				pass
+				change = True
+				for agent in model_run_SM.schedule.agent_buffer(shuffled=False):
+					# changing the policy maker
+					if isinstance(agent, ActiveAgent) and agent.agent_type == 'policymaker' and agent.affiliation == 0 and change == True:
+						_unique_id = agent.unique_id
+						
+						agent.affiliation = 1
+						for issue in range(7): # seven is hardcoded here - issue goals replacement
+							# changing the goals to the goals of the new affiliation
+							# goal_profiles[Experiment][affiliation][issue + 1]
+							agent.issuetree[_unique_id][issue][1] = goal_profiles[exp_i][1][issue + 1]
+						change = False  # stop the for loop once one agent has been changed
+
+			# checker code
+			# for agent in model_run_SM.schedule.agent_buffer(shuffled=False):
+			# 	if isinstance(agent, ActiveAgent):
+			# 		print(' ')
+			# 		print(agent.agent_type, '\n', 'ID', agent.unique_id, 'Aff', agent.affiliation, agent.issuetree[agent.unique_id], '\n', agent.policytree[agent.unique_id])
+
 
 		# output of the data
 		# Schelling model
@@ -231,12 +276,12 @@ for exp_i in range (3):
 		dataPlot_Schelling_model = model_run_schelling.datacollector.get_model_vars_dataframe()
 		# dataPlot_Schelling_agents = model_run_schelling.datacollector.get_agent_vars_dataframe()
 
-		dataPlot_Schelling_model.to_csv('O_Sch_model_' + str(exp_number) + '_' + str(i_runs) + '.csv')
-		# dataPlot_Schelling_agents.to_csv('O_Sch_agents_', exp_number, '_', i_runs, '.csv')  # agents are not needed a this point
+		dataPlot_Schelling_model.to_csv('O_Sch_model_' + str(exp_number) + '_' + str(rep_runs) + '.csv')
+		# dataPlot_Schelling_agents.to_csv('O_Sch_agents_', exp_number, '_', rep_runs, '.csv')  # agents are not needed a this point
 
 		# policy emergence model
 		dataPlot_SM_model = model_run_SM.datacollector.get_model_vars_dataframe()
 		dataPlot_SM_agents = model_run_SM.datacollector.get_agent_vars_dataframe()
 
-		dataPlot_SM_model.to_csv('O_SM_model_' + str(exp_number) + '_' + str(i_runs) + '.csv')
-		dataPlot_SM_agents.to_csv('O_SM_agents_' + str(exp_number) + '_' + str(i_runs) + '.csv')
+		dataPlot_SM_model.to_csv('O_SM_model_' + str(exp_i) + '_' + str(rep_runs) + '.csv')
+		dataPlot_SM_agents.to_csv('O_SM_agents_' + str(exp_i) + '_' + str(rep_runs) + '.csv')

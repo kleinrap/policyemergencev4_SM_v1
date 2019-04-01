@@ -65,7 +65,6 @@ class SchellingAgent(Agent):
         # Increment last move parameter
         self.last_move += 1
 
-
         # If unhappy, move - considering the movement quota and whether the agent is type0 or type1:
         movementQuotaCheck = self.model.movementQuota*self.model.schedule.get_agent_count()
         if happyBool == False:
@@ -104,7 +103,10 @@ class SchellingAgent(Agent):
                 similar += 1
 
         # Converting similarity value into a percentage
-        similar = similar/len(neighborList)
+        if neighborList != 0:
+            similar = similar/len(neighborList)
+        else:
+            similar = 0
 
         if (self.type == 0 and similar > self.model.homophilyType0) or (self.type == 1 and similar > self.model.homophilyType1):
             happyBool = True

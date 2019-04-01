@@ -43,7 +43,7 @@ X. Change from -1,1 to 0,1 intervals for beliefs and goals [DONE]
 	- Change the agenda and policy selection (done)
 	- Automate the input of the policy emergence model (done)
 	- Save all exogenous parameters in the Schelling model (done)
-	- Design the batch run algorithm (no need for now)
+	- Design the batch run algorithm (done)
 	- Create a saving algorithm (goes with batch) (done - limited for now)
 	- Create an unpacker for the outputs
 
