@@ -67,6 +67,7 @@ class ActiveAgent(Agent):
         for PFj in range(len_PF):
             # going through all policy core issues
             for PCi in range(len_PC):
+                gap = 0
                 # print(" ")
                 # print(PFj, PCi)
                 # print(self.policytree[self.unique_id][PFj])
@@ -94,6 +95,7 @@ class ActiveAgent(Agent):
             PF_numerator = 0
             # going through all policy core issues
             for PCi in range(len_PC):
+                gap = 0
                 # print(" ")
                 # print(PFj, PCi)
                 # print(self.policytree[self.unique_id][PFj])
