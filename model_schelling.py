@@ -103,7 +103,7 @@ class SchellingAgent(Agent):
                 similar += 1
 
         # Converting similarity value into a percentage
-        if neighborList != 0:
+        if len(neighborList) != 0:
             similar = similar/len(neighborList)
         else:
             similar = 0
